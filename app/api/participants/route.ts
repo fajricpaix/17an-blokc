@@ -12,10 +12,11 @@ export async function POST(req: Request) {
   const body = await req.json();
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const age = Number(body.age);
-  const block =
+  const blockRaw =
     typeof body.block === "string"
       ? body.block.trim().toUpperCase().replace(/\s+/g, "")
       : "";
+  const block = blockRaw === "CDANAU" ? "C DANAU" : blockRaw;
   const houseNumber =
     typeof body.houseNumber === "string" ? body.houseNumber.trim() : "";
 
@@ -31,9 +32,9 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
-  if (!/^C(1[01]|[1-9])$/.test(block)) {
+  if (!/^C(1[01]|[1-9])$/.test(block) && block !== "C DANAU") {
     return NextResponse.json(
-      { error: "Blok rumah harus antara C1 - C11. Contoh: C5" },
+      { error: "Blok rumah harus antara C1 - C11 atau C Danau. Contoh: C5" },
       { status: 400 }
     );
   }

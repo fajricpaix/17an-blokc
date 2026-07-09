@@ -80,14 +80,15 @@ export default function DaftarAnakModal({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="mb-1 block text-sm font-semibold">
-              Blok Rumah (C1 - C11) <span className="text-merah">*</span>
+              Blok Rumah {" "}
+              <span className="text-merah">*</span>
             </label>
             <input
               type="text"
               required
               value={blok}
               onChange={(e) => setBlok(e.target.value)}
-              placeholder="Contoh: C5"
+              placeholder="Contoh: C5 atau C Danau"
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
             />
           </div>

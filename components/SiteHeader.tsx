@@ -52,7 +52,7 @@ export default function SiteHeader() {
           </span>
         </Link>
 
-        <span className="items-center gap-2 rounded-full border border-red-100 bg-white/80 px-4 py-1.5 text-sm font-bold text-merah shadow-sm sm:inline-flex">
+        <span className="items-center gap-2 rounded-full border border-red-100 bg-white/80 px-4 py-1.5 text-sm font-bold text-merah shadow-sm inline-flex">
           <span className="inline-block origin-bottom-left animate-wave">
             🇮🇩
           </span>

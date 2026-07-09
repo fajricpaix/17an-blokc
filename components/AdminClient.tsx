@@ -101,6 +101,35 @@ export default function AdminClient({
     router.refresh();
   }
 
+  function downloadPeserta() {
+    const header = ["No", "Nama", "Umur", "Kategori", "Alamat"];
+    const rows = pesertaTampil.map((p, i) => [
+      i + 1,
+      p.name,
+      `${p.age} th`,
+      CATEGORY_LABELS[p.category],
+      `Blok ${p.block} No. ${p.houseNumber}`,
+    ]);
+    const csv = [header, ...rows]
+      .map((row) =>
+        row.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+    const blob = new Blob(["﻿" + csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `peserta-${tab === "Semua" ? "semua" : tab}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function cetakPesertaPDF() {
+    window.print();
+  }
+
   const lombaTampil =
     tab === "Semua" ? lombas : lombas.filter((l) => l.category === tab);
   const pesertaTampil =
@@ -116,7 +145,7 @@ export default function AdminClient({
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-16">
-      <header className="-mx-4 mb-8 bg-linear-to-r from-merah-tua via-merah to-rose-600 bg-size-[200%_100%] px-4 py-8 text-white animate-gradient-x">
+      <header className="-mx-4 mb-8 bg-linear-to-r from-merah-tua via-merah to-rose-600 bg-size-[200%_100%] px-4 py-8 text-white animate-gradient-x print:hidden">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-extrabold sm:text-3xl">
@@ -150,13 +179,13 @@ export default function AdminClient({
       </header>
 
       {notif && (
-        <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-red-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-merah-tua shadow-2xl shadow-red-900/10 backdrop-blur">
+        <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-red-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-merah-tua shadow-2xl shadow-red-900/10 backdrop-blur print:hidden">
           {notif}
         </div>
       )}
 
       {/* Tab Kategori */}
-      <nav className="mb-8 flex flex-wrap gap-2">
+      <nav className="mb-8 flex flex-wrap gap-2 print:hidden">
         {(["Semua", ...ALL_CATEGORIES] as Tab[]).map((t) => (
           <button
             key={t}
@@ -180,7 +209,7 @@ export default function AdminClient({
       </nav>
 
       {/* Daftar Lomba */}
-      <section className="mb-12">
+      <section className="mb-12 print:hidden">
         <h2 className="mb-1 text-xl font-extrabold text-merah">
           🏆 Daftar Lomba{tab !== "Semua" ? ` — ${CATEGORY_LABELS[tab]}` : ""}
         </h2>
@@ -254,26 +283,55 @@ export default function AdminClient({
       {/* Tabel Peserta */}
       {tabPunyaPeserta && (
         <section>
-          <h2 className="mb-1 text-xl font-extrabold text-merah">
-            📝 Tabel Data Peserta
-            {tab !== "Semua" ? ` — ${CATEGORY_LABELS[tab]}` : ""}
-          </h2>
-          <p className="mb-4 text-gray-600">
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-xl font-extrabold text-merah">
+              📝 Tabel Data Peserta
+              {tab !== "Semua" ? ` — ${CATEGORY_LABELS[tab]}` : ""}
+            </h2>
+            <div className="flex gap-2 print:hidden">
+              <button
+                onClick={downloadPeserta}
+                className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-merah-tua transition-colors hover:bg-red-50"
+              >
+                ⬇️ Download
+              </button>
+              <button
+                onClick={cetakPesertaPDF}
+                className="rounded-lg bg-merah px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-merah-tua"
+              >
+                🖨️ Cetak / PDF
+              </button>
+            </div>
+          </div>
+          <p className="mb-4 text-gray-600 print:hidden">
             Total <strong>{pesertaTampil.length}</strong> peserta
             {tab !== "Semua" ? " di kategori ini" : " terdaftar"}. Gunakan
             tombol hapus untuk membersihkan data ganda, kesalahan input umur,
             atau pembatalan sebelum nomor dada dicetak.
           </p>
           <div className="overflow-x-auto rounded-xl border border-red-100 bg-white shadow-sm">
-            <table className="w-full min-w-160 text-left text-sm">
+            <table className="w-full min-w-160 text-left text-sm print:border-collapse">
               <thead className="bg-merah text-white">
                 <tr>
-                  <th className="px-4 py-3">No</th>
-                  <th className="px-4 py-3">Nama</th>
-                  <th className="px-4 py-3">Umur</th>
-                  <th className="px-4 py-3">Kategori</th>
-                  <th className="px-4 py-3">Alamat</th>
-                  <th className="px-4 py-3">Aksi</th>
+                  <th className="px-4 py-3 print:border print:border-gray-400">
+                    No
+                  </th>
+                  <th className="px-4 py-3 print:border print:border-gray-400">
+                    Nama
+                  </th>
+                  <th className="px-4 py-3 print:border print:border-gray-400">
+                    Umur
+                  </th>
+                  <th className="px-4 py-3 print:border print:border-gray-400">
+                    Alamat
+                  </th>
+                  <th className="px-4 py-3 print:border print:border-gray-400">
+                    Kategori
+                  </th>
+                  <th className="px-4 py-3 print:hidden">Aksi</th>
+                  <th className="hidden px-4 py-3 print:table-cell print:border print:border-gray-400">
+                    Keterangan
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -294,25 +352,34 @@ export default function AdminClient({
                         i % 2 ? "bg-red-50/40" : "bg-white"
                       }`}
                     >
-                      <td className="px-4 py-3 text-gray-500">{i + 1}</td>
-                      <td className="px-4 py-3 font-semibold">{p.name}</td>
-                      <td className="px-4 py-3">{p.age} th</td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-gray-500 print:border print:border-gray-400">
+                        {i + 1}
+                      </td>
+                      <td className="px-4 py-3 font-semibold print:border print:border-gray-400">
+                        {p.name}
+                      </td>
+                      <td className="px-4 py-3 print:border print:border-gray-400">
+                        {p.age} th
+                      </td>
+                      <td className="px-4 py-3 print:border print:border-gray-400">
+                        {p.block} No. {p.houseNumber}
+                      </td>
+                      <td className="px-4 py-3 print:border print:border-gray-400">
                         {CATEGORY_LABELS[p.category]}
                       </td>
-                      <td className="px-4 py-3">
-                        Blok {p.block} No. {p.houseNumber}
-                      </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 print:hidden">
                         <button
                           onClick={() => hapusPeserta(p)}
                           disabled={busyId === p.id}
-                          className="rounded-lg bg-merah px-3 py-1.5 text-xs font-bold text-white hover:bg-merah-tua disabled:opacity-60"
+                          className="rounded-lg bg-merah px-3 py-1.5 text-xs font-semibold text-white hover:bg-merah-tua disabled:opacity-60"
                         >
                           {busyId === p.id
                             ? "Menghapus..."
-                            : "🗑️ Hapus Peserta"}
+                            : "🗑️ Hapus"}
                         </button>
+                      </td>
+                      <td className="hidden px-4 py-3 print:table-cell print:border print:border-gray-400">
+                        &nbsp;
                       </td>
                     </tr>
                   ))
