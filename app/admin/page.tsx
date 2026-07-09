@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { isAdmin } from "@/lib/auth";
 import { getCompetitions, getParticipants } from "@/lib/db";
-import AdminClient from "@/components/AdminClient";
+import AdminClient from "@/components/admin/AdminClient";
 
 export const dynamic = "force-dynamic";
 

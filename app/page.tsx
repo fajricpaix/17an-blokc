@@ -1,5 +1,5 @@
 import { getCompetitions, getParticipants } from "@/lib/db";
-import HomeClient from "@/components/HomeClient";
+import HomeClient from "@/components/home/HomeClient";
 
 export const dynamic = "force-dynamic";
 
