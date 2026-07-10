@@ -59,36 +59,24 @@ export default function KategoriCard({
                 Belum ada pendaftar. Jadilah yang pertama! 🚀
               </p>
             ) : (
-              <div className="overflow-x-auto rounded-lg border border-red-100">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-red-50 text-dark-primary">
-                    <tr>
-                      <th className="px-2 py-1.5 font-bold">No</th>
-                      <th className="px-2 py-1.5 font-bold">Nama</th>
-                      <th className="px-2 py-1.5 font-bold">Umur</th>
-                      <th className="px-2 py-1.5 font-bold">Alamat</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pesertas.map((p, i) => (
-                      <tr
-                        key={p.id}
-                        className={`transition-colors duration-200 hover:bg-red-50 ${
-                          i % 2 ? "bg-red-50/40" : "bg-white"
-                        }`}
-                      >
-                        <td className="px-2 py-1.5 text-gray-500">{i + 1}</td>
-                        <td className="px-2 py-1.5 font-semibold capitalize">{p.name}</td>
-                        <td className="px-2 py-1.5 whitespace-nowrap">
-                          {p.age} th
-                        </td>
-                        <td className="px-2 py-1.5 whitespace-nowrap text-gray-600 capitalize">
-                          {p.block} / {p.houseNumber}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-3">
+                {pesertas.map((p, i) => (
+                  <div
+                    key={p.id}
+                    style={{ animationDelay: `${i * 40}ms` }}
+                    className="animate-pop-in group/peserta flex min-w-0 flex-col items-center gap-1 rounded-xl border border-red-100 bg-white px-2 py-2.5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-md hover:shadow-red-900/10"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-dark-primary via-primary to-rose-600 text-xs font-extrabold text-white shadow-sm transition-transform duration-300 group-hover/peserta:scale-110 group-hover/peserta:-rotate-6">
+                      {p.name.charAt(0).toUpperCase()}
+                    </span>
+                    <p className="w-full truncate text-xs font-semibold capitalize">
+                      {p.name}
+                    </p>
+                    <p className="w-full truncate text-[10px] whitespace-nowrap text-gray-500 capitalize">
+                      {p.age} th &middot; {p.block}/{p.houseNumber}
+                    </p>
+                  </div>
+                ))}
               </div>
             )}
           </div>
