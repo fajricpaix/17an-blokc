@@ -4,27 +4,35 @@ import { useState } from "react";
 import {
   Competition,
   Participant,
+  Rundown,
   Category,
   CHILD_CATEGORIES,
   CATEGORY_LABELS,
 } from "@/lib/types";
 import TambahLombaModal from "@/components/TambahLombaModal";
+import TambahRundownModal from "@/components/TambahRundownModal";
 import AdminHeader from "./AdminHeader";
 import CategoryTabs, { Tab } from "./CategoryTabs";
 import LombaTable from "./LombaTable";
 import ParticipantTable from "./ParticipantTable";
+import RundownTable from "./RundownTable";
+import TambahFab from "./TambahFab";
 
 export default function AdminClient({
   initialLombas,
   initialPesertas,
+  initialRundowns,
 }: {
   initialLombas: Competition[];
   initialPesertas: Participant[];
+  initialRundowns: Rundown[];
 }) {
   const [lombas, setLombas] = useState(initialLombas);
   const [pesertas, setPesertas] = useState(initialPesertas);
+  const [rundowns, setRundowns] = useState(initialRundowns);
   const [tab, setTab] = useState<Tab>("Semua");
   const [showTambahLomba, setShowTambahLomba] = useState(false);
+  const [showTambahRundown, setShowTambahRundown] = useState(false);
   const [editLomba, setEditLomba] = useState<Competition | null>(null);
   const [notif, setNotif] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -38,6 +46,15 @@ export default function AdminClient({
     try {
       const res = await fetch("/api/competitions");
       if (res.ok) setLombas(await res.json());
+    } catch {
+      // biarkan data lama jika gagal
+    }
+  }
+
+  async function refreshRundowns() {
+    try {
+      const res = await fetch("/api/rundowns");
+      if (res.ok) setRundowns(await res.json());
     } catch {
       // biarkan data lama jika gagal
     }
@@ -86,6 +103,29 @@ export default function AdminClient({
       }
       setPesertas((prev) => prev.filter((x) => x.id !== p.id));
       tampilkanNotif(`🗑️ Peserta "${p.name}" berhasil dihapus.`);
+    } catch {
+      tampilkanNotif("⚠️ Gagal terhubung ke server.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function hapusRundown(r: Rundown) {
+    if (!confirm(`Hapus rundown "${r.title}"?`)) {
+      return;
+    }
+    setBusyId(r.id);
+    try {
+      const res = await fetch(`/api/rundowns/${r.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        tampilkanNotif(`⚠️ ${data.error ?? "Gagal menghapus rundown."}`);
+        return;
+      }
+      setRundowns((prev) => prev.filter((x) => x.id !== r.id));
+      tampilkanNotif(`🗑️ Rundown "${r.title}" berhasil dihapus.`);
     } catch {
       tampilkanNotif("⚠️ Gagal terhubung ke server.");
     } finally {
@@ -145,16 +185,19 @@ export default function AdminClient({
         </div>
       )}
 
-      <div className="flex justify-between my-4 gap-x-4">
+      <TambahFab
+        onPilihLomba={() => setShowTambahLomba(true)}
+        onPilihRundown={() => setShowTambahRundown(true)}
+      />
+
+      <RundownTable
+        rundowns={rundowns}
+        busyId={busyId}
+        onHapus={hapusRundown}
+      />
+
+      <div className="mt-6 mb-2 pt-4 border-t border-merah">
         <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
-        <div className="w-full">
-          <button
-            onClick={() => setShowTambahLomba(true)}
-            className="rounded-full border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-merah-tua shadow-sm transition-colors duration-200 hover:bg-red-50"
-          >
-            + Tambah Jenis Lomba
-          </button>
-        </div>
       </div>
 
       <LombaTable
@@ -166,14 +209,16 @@ export default function AdminClient({
       />
 
       {tabPunyaPeserta && (
-        <ParticipantTable
-          tab={tab}
-          pesertaTampil={pesertaTampil}
-          busyId={busyId}
-          onDownload={downloadPeserta}
-          onPrint={cetakPesertaPDF}
-          onHapus={hapusPeserta}
-        />
+        <div className="mb-4 pt-6 border-t border-merah">
+          <ParticipantTable
+            tab={tab}
+            pesertaTampil={pesertaTampil}
+            busyId={busyId}
+            onDownload={downloadPeserta}
+            onPrint={cetakPesertaPDF}
+            onHapus={hapusPeserta}
+          />
+        </div>
       )}
 
       {showTambahLomba && (
@@ -182,6 +227,15 @@ export default function AdminClient({
           onSuccess={() => {
             refreshLombas();
             tampilkanNotif("✅ Lomba baru berhasil disimpan.");
+          }}
+        />
+      )}
+      {showTambahRundown && (
+        <TambahRundownModal
+          onClose={() => setShowTambahRundown(false)}
+          onSuccess={() => {
+            refreshRundowns();
+            tampilkanNotif("✅ Rundown baru berhasil disimpan.");
           }}
         />
       )}

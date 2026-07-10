@@ -30,6 +30,14 @@ export interface Participant {
   registeredAt: string;
 }
 
+export interface Rundown {
+  id: string;
+  startTime: string;
+  endTime: string;
+  title: string;
+  description: string;
+}
+
 export function categoryFromAge(age: number): Category {
   if (age <= 6) return "PAUD-TK";
   if (age <= 9) return "SD Kecil";

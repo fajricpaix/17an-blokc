@@ -1,4 +1,4 @@
-import { Competition, Participant } from "./types";
+import { Competition, Participant, Rundown } from "./types";
 
 // Semua akses data berjalan di server (Server Component / Route Handler),
 // jadi pakai REST API Realtime Database via fetch, bukan SDK client
@@ -89,5 +89,33 @@ export async function deleteParticipant(id: string): Promise<boolean> {
   );
   if (!existing) return false;
   await dbFetch(`participants/${id}`, { method: "DELETE" });
+  return true;
+}
+
+export async function getRundowns(): Promise<Rundown[]> {
+  const val = await dbFetch<Record<string, Omit<Rundown, "id">> | null>(
+    "rundowns"
+  );
+  return snapshotToList<Rundown>(val).sort((a, b) =>
+    a.startTime.localeCompare(b.startTime)
+  );
+}
+
+export async function addRundown(
+  data: Omit<Rundown, "id">
+): Promise<Rundown> {
+  const { name } = await dbFetch<{ name: string }>("rundowns", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return { id: name, ...data };
+}
+
+export async function deleteRundown(id: string): Promise<boolean> {
+  const existing = await dbFetch<Omit<Rundown, "id"> | null>(
+    `rundowns/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`rundowns/${id}`, { method: "DELETE" });
   return true;
 }

@@ -15,9 +15,9 @@ export default function LombaTable({
   onHapus: (l: Competition) => void;
 }) {
   return (
-    <section className="mb-12 print:hidden">
+    <section className="mb-8 print:hidden">
       <h2 className="mb-1 text-xl font-extrabold text-merah">
-        🏆 Daftar Lomba{tab !== "Semua" ? ` — ${CATEGORY_LABELS[tab]}` : ""}
+        🏆 Daftar Lomba :{tab !== "Semua" ? ` ${CATEGORY_LABELS[tab]}` : ""}
       </h2>
       <p className="mb-4 text-gray-600">
         Total <strong>{lombaTampil.length}</strong> lomba

@@ -7,7 +7,7 @@ const EMOJI_KATEGORI: Record<Category, string> = {
   "SD Besar": "📚",
   Bapak: "👨",
   Ibu: "👩",
-  Pasangan: "💑",
+  Pasangan: "👩🏻‍❤️‍👨🏻",
 };
 
 export default function KategoriCard({
@@ -21,19 +21,19 @@ export default function KategoriCard({
 }) {
   return (
     <div className="group flex h-full flex-col rounded-2xl border border-red-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-red-200 hover:shadow-xl hover:shadow-red-900/5">
-      <h4 className="mb-3 flex items-center gap-2 border-b border-red-100 pb-2.5 font-bold text-merah-tua">
+      <h4 className="mb-3 flex items-center gap-2 border-b border-red-100 pb-2.5 font-bold text-merah-tua capitalize">
         <span className="inline-block text-xl transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-6">
           {EMOJI_KATEGORI[kategori]}
         </span>
         {CATEGORY_LABELS[kategori]}
       </h4>
       {lombas.length === 0 ? (
-        <p className="text-sm text-gray-400 italic">Belum ada lomba.</p>
+        <p className="text-sm text-gray-400 italic">Belum Ada Lomba.</p>
       ) : (
         <ul className="space-y-3.5 text-sm">
           {lombas.map((l) => (
             <li key={l.id}>
-              <p className="font-semibold">🚩 {l.name}</p>
+              <p className="font-semibold capitalize">🚩 {l.name}</p>
               {l.description && (
                 <p className="mt-0.5 leading-relaxed text-gray-600">
                   {l.description}
@@ -78,11 +78,11 @@ export default function KategoriCard({
                         }`}
                       >
                         <td className="px-2 py-1.5 text-gray-500">{i + 1}</td>
-                        <td className="px-2 py-1.5 font-semibold">{p.name}</td>
+                        <td className="px-2 py-1.5 font-semibold capitalize">{p.name}</td>
                         <td className="px-2 py-1.5 whitespace-nowrap">
                           {p.age} th
                         </td>
-                        <td className="px-2 py-1.5 whitespace-nowrap text-gray-600">
+                        <td className="px-2 py-1.5 whitespace-nowrap text-gray-600 capitalize">
                           {p.block} / {p.houseNumber}
                         </td>
                       </tr>

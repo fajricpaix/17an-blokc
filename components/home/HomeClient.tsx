@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Competition, Participant } from "@/lib/types";
+import { Competition, Participant, Rundown } from "@/lib/types";
 import DaftarAnakModal from "@/components/DaftarAnakModal";
 import TambahLombaModal from "@/components/TambahLombaModal";
 import HeroSection from "./HeroSection";
@@ -12,12 +12,15 @@ import SiteFooter from "./SiteFooter";
 export default function HomeClient({
   initialLombas,
   initialPesertas,
+  initialRundowns,
 }: {
   initialLombas: Competition[];
   initialPesertas: Participant[];
+  initialRundowns: Rundown[];
 }) {
   const [lombas, setLombas] = useState(initialLombas);
   const [pesertas, setPesertas] = useState(initialPesertas);
+  const [rundowns, setRundowns] = useState(initialRundowns);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showDaftar, setShowDaftar] = useState(false);
   const [showTambahLomba, setShowTambahLomba] = useState(false);
@@ -25,12 +28,14 @@ export default function HomeClient({
 
   const refresh = useCallback(async () => {
     try {
-      const [lRes, pRes] = await Promise.all([
+      const [lRes, pRes, rRes] = await Promise.all([
         fetch("/api/competitions"),
         fetch("/api/participants"),
+        fetch("/api/rundowns"),
       ]);
       if (lRes.ok) setLombas(await lRes.json());
       if (pRes.ok) setPesertas(await pRes.json());
+      if (rRes.ok) setRundowns(await rRes.json());
     } catch {
       // biarkan data lama tampil jika refresh gagal
     }
@@ -65,7 +70,7 @@ export default function HomeClient({
         onTambahLombaClick={() => setShowTambahLomba(true)}
       />
 
-      <RundownSection />
+      <RundownSection rundowns={rundowns} />
 
       <LombaSection
         lombas={lombas}
