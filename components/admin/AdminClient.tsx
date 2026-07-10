@@ -145,7 +145,7 @@ export default function AdminClient({
         </div>
       )}
 
-      <div className="flex justify-between mb-4 gap-x-4">
+      <div className="flex justify-between my-4 gap-x-4">
         <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
         <div className="w-full">
           <button
