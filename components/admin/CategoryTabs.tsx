@@ -46,9 +46,6 @@ export default function CategoryTabs({
       >
         <span className="flex items-center gap-2">
           {tab}
-          <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] text-primary">
-            {jumlahTab(tab)}
-          </span>
         </span>
         <svg
           viewBox="0 0 20 20"
@@ -85,13 +82,6 @@ export default function CategoryTabs({
                 }`}
               >
                 {t}
-                <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] ${
-                    tab === t ? "bg-white/25" : "bg-red-100 text-primary"
-                  }`}
-                >
-                  {jumlahTab(t)}
-                </span>
               </button>
             </li>
           ))}
