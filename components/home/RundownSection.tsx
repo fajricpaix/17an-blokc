@@ -56,35 +56,27 @@ export default function RundownSection() {
         <p className="mb-5 text-gray-600">
           Susunan kegiatan dari pagi hingga malam puncak.
         </p>
-        <div className="overflow-x-auto rounded-2xl border border-red-100 bg-white shadow-sm">
-          <table className="w-full min-w-140 text-left text-sm">
-            <thead className="bg-linear-to-r from-merah-tua via-merah to-rose-600 text-white">
-              <tr>
-                <th className="px-4 py-3.5 whitespace-nowrap">Waktu</th>
-                <th className="px-4 py-3.5">Kegiatan</th>
-                <th className="px-4 py-3.5">Detail Kegiatan</th>
-              </tr>
-            </thead>
-            <tbody>
-              {RUNDOWN.map((r, i) => (
-                <tr
-                  key={r.waktu}
-                  className={`transition-colors duration-200 hover:bg-red-50 ${
-                    i % 2 ? "bg-red-50/40" : "bg-white"
-                  }`}
-                >
-                  <td className="px-4 py-3.5 font-bold whitespace-nowrap text-merah-tua">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {RUNDOWN.map((r, i) => (
+            <Reveal key={r.waktu} delay={i * 60}>
+              <div className="group flex h-full flex-col rounded-2xl border border-red-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-red-200 hover:shadow-xl hover:shadow-red-900/5">
+                <div className="mb-3 flex items-center gap-3">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-merah-tua via-merah to-rose-600 text-2xl shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                    {r.emoji}
+                  </span>
+                  <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-bold whitespace-nowrap text-merah-tua">
                     {r.waktu}
-                  </td>
-                  <td className="px-4 py-3.5 font-semibold">
-                    <span className="mr-1.5">{r.emoji}</span>
-                    {r.kegiatan}
-                  </td>
-                  <td className="px-4 py-3.5 text-gray-600">{r.detail}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </span>
+                </div>
+                <h3 className="mb-1.5 font-bold text-merah-tua">
+                  {r.kegiatan}
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-600">
+                  {r.detail}
+                </p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
     </Reveal>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Competition,
   Participant,
@@ -22,7 +21,6 @@ export default function AdminClient({
   initialLombas: Competition[];
   initialPesertas: Participant[];
 }) {
-  const router = useRouter();
   const [lombas, setLombas] = useState(initialLombas);
   const [pesertas, setPesertas] = useState(initialPesertas);
   const [tab, setTab] = useState<Tab>("Semua");
@@ -95,12 +93,6 @@ export default function AdminClient({
     }
   }
 
-  async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
-  }
-
   function downloadPeserta() {
     const header = ["No", "Nama", "Umur", "Kategori", "Alamat"];
     const rows = pesertaTampil.map((p, i) => [
@@ -145,10 +137,7 @@ export default function AdminClient({
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-16">
-      <AdminHeader
-        onTambahLombaClick={() => setShowTambahLomba(true)}
-        onLogout={logout}
-      />
+      <AdminHeader />
 
       {notif && (
         <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-red-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-merah-tua shadow-2xl shadow-red-900/10 backdrop-blur print:hidden">
@@ -156,7 +145,17 @@ export default function AdminClient({
         </div>
       )}
 
-      <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
+      <div className="flex justify-between mb-4 gap-x-4">
+        <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
+        <div className="w-full">
+          <button
+            onClick={() => setShowTambahLomba(true)}
+            className="rounded-full border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-merah-tua shadow-sm transition-colors duration-200 hover:bg-red-50"
+          >
+            + Tambah Jenis Lomba
+          </button>
+        </div>
+      </div>
 
       <LombaTable
         tab={tab}
