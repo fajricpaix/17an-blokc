@@ -9,9 +9,30 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
   title: "Acara 17an Blok C Serpong Lagoon",
   description:
     "Website pendaftaran digital lomba 17 Agustus warga Blok C Pelican, Serpong Lagoon.",
+  icons: {
+    icon: "/logo.webp",
+    shortcut: "/logo.webp",
+    apple: "/logo.webp",
+  },
+  openGraph: {
+    title: "Acara 17an Blok C Serpong Lagoon",
+    description:
+      "Website pendaftaran digital lomba 17 Agustus warga Blok C Pelican, Serpong Lagoon.",
+    images: ["/logo.webp"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Acara 17an Blok C Serpong Lagoon",
+    description:
+      "Website pendaftaran digital lomba 17 Agustus warga Blok C Pelican, Serpong Lagoon.",
+    images: ["/logo.webp"],
+  },
 };
 
 export default function RootLayout({
