@@ -56,7 +56,7 @@ export default function HomeClient({
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-16">
+    <main className="mx-auto w-full sm:max-w-6xl flex-1 px-4 pb-16">
       {/* Toast Notifikasi */}
       {notif && (
         <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-green-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-green-800 shadow-2xl shadow-green-900/10 backdrop-blur">
