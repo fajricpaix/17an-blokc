@@ -110,29 +110,6 @@ export default function AdminClient({
     }
   }
 
-  async function hapusRundown(r: Rundown) {
-    if (!confirm(`Hapus rundown "${r.title}"?`)) {
-      return;
-    }
-    setBusyId(r.id);
-    try {
-      const res = await fetch(`/api/rundowns/${r.id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        tampilkanNotif(`⚠️ ${data.error ?? "Gagal menghapus rundown."}`);
-        return;
-      }
-      setRundowns((prev) => prev.filter((x) => x.id !== r.id));
-      tampilkanNotif(`🗑️ Rundown "${r.title}" berhasil dihapus.`);
-    } catch {
-      tampilkanNotif("⚠️ Gagal terhubung ke server.");
-    } finally {
-      setBusyId(null);
-    }
-  }
-
   function downloadPeserta() {
     const header = ["No", "Nama", "Umur", "Kategori", "Alamat"];
     const rows = pesertaTampil.map((p, i) => [
@@ -190,11 +167,7 @@ export default function AdminClient({
         onPilihRundown={() => setShowTambahRundown(true)}
       />
 
-      <RundownTable
-        rundowns={rundowns}
-        busyId={busyId}
-        onHapus={hapusRundown}
-      />
+      <RundownTable rundowns={rundowns} />
 
       <div className="mt-6 mb-2 pt-4 border-t border-primary">
         <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
