@@ -16,7 +16,7 @@ export default function LombaTable({
 }) {
   return (
     <section className="mb-8 print:hidden">
-      <h2 className="mb-1 text-xl font-extrabold text-merah">
+      <h2 className="mb-1 text-xl font-extrabold text-primary">
         🏆 Daftar Lomba :{tab !== "Semua" ? ` ${CATEGORY_LABELS[tab]}` : ""}
       </h2>
       <p className="mb-4 text-gray-600">
@@ -25,7 +25,7 @@ export default function LombaTable({
       </p>
       <div className="overflow-x-auto rounded-xl border border-red-100 bg-white shadow-sm">
         <table className="w-full min-w-160 text-left text-sm">
-          <thead className="bg-merah text-white">
+          <thead className="bg-primary text-white">
             <tr>
               <th className="px-4 py-3">No</th>
               <th className="px-4 py-3">Nama Lomba</th>
@@ -65,14 +65,14 @@ export default function LombaTable({
                       <button
                         onClick={() => onEdit(l)}
                         disabled={busyId === l.id}
-                        className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-merah-tua transition-colors hover:bg-red-50 disabled:opacity-60"
+                        className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
                       >
                         ✏️ Edit
                       </button>
                       <button
                         onClick={() => onHapus(l)}
                         disabled={busyId === l.id}
-                        className="rounded-lg bg-merah px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-merah-tua disabled:opacity-60"
+                        className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-dark-primary disabled:opacity-60"
                       >
                         {busyId === l.id ? "..." : "🗑️ Hapus"}
                       </button>

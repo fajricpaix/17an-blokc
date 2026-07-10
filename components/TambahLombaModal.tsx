@@ -66,7 +66,7 @@ export default function TambahLombaModal({
       <form onSubmit={submit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm font-semibold">
-            Nama Perlombaan <span className="text-merah">*</span>
+            Nama Perlombaan <span className="text-primary">*</span>
           </label>
           <input
             type="text"
@@ -74,17 +74,17 @@ export default function TambahLombaModal({
             value={nama}
             onChange={(e) => setNama(e.target.value)}
             placeholder="Contoh: Lomba Balap Karung"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           />
         </div>
         <div>
           <label className="mb-1 block text-sm font-semibold">
-            Kategori Umur/Peserta <span className="text-merah">*</span>
+            Kategori Umur/Peserta <span className="text-primary">*</span>
           </label>
           <select
             value={kategori}
             onChange={(e) => setKategori(e.target.value as Category)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           >
             {ALL_CATEGORIES.map((k) => (
               <option key={k} value={k}>
@@ -102,15 +102,15 @@ export default function TambahLombaModal({
             value={deskripsi}
             onChange={(e) => setDeskripsi(e.target.value)}
             placeholder="Panduan atau teknis singkat jalannya lomba..."
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           />
         </div>
-        {error && <p className="text-sm font-medium text-merah">{error}</p>}
+        {error && <p className="text-sm font-medium text-primary">{error}</p>}
         <div className="flex gap-3 pt-1">
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 rounded-lg bg-merah px-4 py-2 font-bold text-white hover:bg-merah-tua disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-dark-primary disabled:opacity-60"
           >
             {loading
               ? "Menyimpan..."

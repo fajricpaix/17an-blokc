@@ -15,7 +15,7 @@ export default function RundownTable({
 }) {
   return (
     <section className="my-4 print:hidden">
-      <h2 className="mb-1 text-xl font-extrabold text-merah">
+      <h2 className="mb-1 text-xl font-extrabold text-primary">
         📋 Rundown Acara
       </h2>
       <p className="mb-4 text-gray-600">
@@ -23,7 +23,7 @@ export default function RundownTable({
       </p>
       <div className="overflow-x-auto rounded-xl border border-red-100 bg-white shadow-sm">
         <table className="w-full min-w-160 text-left text-sm">
-          <thead className="bg-merah text-white">
+          <thead className="bg-primary text-white">
             <tr>
               <th className="px-4 py-3">Jam</th>
               <th className="px-4 py-3">Kegiatan</th>
@@ -49,7 +49,7 @@ export default function RundownTable({
                     i % 2 ? "bg-red-50/40" : "bg-white"
                   }`}
                 >
-                  <td className="px-4 py-3 font-bold whitespace-nowrap text-merah-tua">
+                  <td className="px-4 py-3 font-bold whitespace-nowrap text-dark-primary">
                     {formatJam(r.startTime)} - {formatJam(r.endTime)}
                   </td>
                   <td className="px-4 py-3 font-semibold">{r.title}</td>
@@ -60,7 +60,7 @@ export default function RundownTable({
                     <button
                       onClick={() => onHapus(r)}
                       disabled={busyId === r.id}
-                      className="rounded-lg bg-merah px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-merah-tua disabled:opacity-60"
+                      className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-dark-primary disabled:opacity-60"
                     >
                       {busyId === r.id ? "..." : "🗑️ Hapus"}
                     </button>

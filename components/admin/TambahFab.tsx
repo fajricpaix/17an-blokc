@@ -55,9 +55,9 @@ export default function TambahFab({
               transitionDelay: `${(ACTIONS.length - 1 - i) * 70}ms`,
               animationDelay: `${(ACTIONS.length - 1 - i) * 70}ms`,
             }}
-            className="animate-pop-in flex items-center gap-2.5 rounded-full bg-white py-1.5 pr-4 pl-1.5 text-sm font-bold text-merah-tua shadow-lg shadow-red-900/15 ring-1 ring-red-100 transition-all duration-200 hover:-translate-x-1 hover:shadow-xl active:scale-95"
+            className="animate-pop-in flex items-center gap-2.5 rounded-full bg-white py-1.5 pr-4 pl-1.5 text-sm font-bold text-dark-primary shadow-lg shadow-red-900/15 ring-1 ring-red-100 transition-all duration-200 hover:-translate-x-1 hover:shadow-xl active:scale-95"
           >
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-merah-tua via-merah to-rose-600 text-base shadow-sm">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-dark-primary via-primary to-rose-600 text-base shadow-sm">
               {a.emoji}
             </span>
             {a.label}
@@ -70,7 +70,7 @@ export default function TambahFab({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Tambah data"
-        className={`flex size-14 items-center justify-center rounded-full bg-linear-to-br from-merah-tua via-merah to-rose-600 text-3xl leading-none font-bold text-white shadow-lg shadow-red-900/30 transition-transform duration-300 hover:scale-110 active:scale-95 ${
+        className={`flex size-14 items-center justify-center rounded-full bg-linear-to-br from-dark-primary via-primary to-rose-600 text-3xl leading-none font-bold text-white shadow-lg shadow-red-900/30 transition-transform duration-300 hover:scale-110 active:scale-95 ${
           open ? "rotate-45" : ""
         }`}
       >

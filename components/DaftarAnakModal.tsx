@@ -51,7 +51,7 @@ export default function DaftarAnakModal({
       <form onSubmit={submit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm font-semibold">
-            Nama Anak <span className="text-merah">*</span>
+            Nama Anak <span className="text-primary">*</span>
           </label>
           <input
             type="text"
@@ -59,12 +59,12 @@ export default function DaftarAnakModal({
             value={nama}
             onChange={(e) => setNama(e.target.value)}
             placeholder="Contoh: Budi Santoso"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           />
         </div>
         <div>
           <label className="mb-1 block text-sm font-semibold">
-            Umur Anak (4 - 12 tahun) <span className="text-merah">*</span>
+            Umur Anak (4 - 12 tahun) <span className="text-primary">*</span>
           </label>
           <input
             type="number"
@@ -74,14 +74,14 @@ export default function DaftarAnakModal({
             value={umur}
             onChange={(e) => setUmur(e.target.value)}
             placeholder="Contoh: 8"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="mb-1 block text-sm font-semibold">
               Blok Rumah {" "}
-              <span className="text-merah">*</span>
+              <span className="text-primary">*</span>
             </label>
             <input
               type="text"
@@ -89,12 +89,12 @@ export default function DaftarAnakModal({
               value={blok}
               onChange={(e) => setBlok(e.target.value)}
               placeholder="Contoh: C5 atau C Danau"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
             />
           </div>
           <div>
             <label className="mb-1 block text-sm font-semibold">
-              Nomor Rumah <span className="text-merah">*</span>
+              Nomor Rumah <span className="text-primary">*</span>
             </label>
             <input
               type="text"
@@ -102,16 +102,16 @@ export default function DaftarAnakModal({
               value={nomorRumah}
               onChange={(e) => setNomorRumah(e.target.value)}
               placeholder="Contoh: 15"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
             />
           </div>
         </div>
-        {error && <p className="text-sm font-medium text-merah">{error}</p>}
+        {error && <p className="text-sm font-medium text-primary">{error}</p>}
         <div className="flex gap-3 pt-1">
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 rounded-lg bg-merah px-4 py-2 font-bold text-white hover:bg-merah-tua disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-dark-primary disabled:opacity-60"
           >
             {loading ? "Mengirim..." : "Daftarkan Anak"}
           </button>

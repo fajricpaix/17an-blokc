@@ -42,18 +42,18 @@ export default function CategoryTabs({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-3 rounded-full border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-merah-tua shadow-sm transition-colors duration-200 hover:bg-red-50"
+        className="flex w-full items-center justify-between gap-3 rounded-full border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-dark-primary shadow-sm transition-colors duration-200 hover:bg-red-50"
       >
         <span className="flex items-center gap-2">
           {tab}
-          <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] text-merah">
+          <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] text-primary">
             {jumlahTab(tab)}
           </span>
         </span>
         <svg
           viewBox="0 0 20 20"
           fill="currentColor"
-          className={`size-4 shrink-0 text-merah transition-transform duration-200 ${
+          className={`size-4 shrink-0 text-primary transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         >
@@ -80,14 +80,14 @@ export default function CategoryTabs({
                 }}
                 className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold transition-colors duration-150 ${
                   tab === t
-                    ? "bg-merah text-white"
-                    : "text-merah-tua hover:bg-red-50"
+                    ? "bg-primary text-white"
+                    : "text-dark-primary hover:bg-red-50"
                 }`}
               >
                 {t}
                 <span
                   className={`rounded-full px-1.5 py-0.5 text-[10px] ${
-                    tab === t ? "bg-white/25" : "bg-red-100 text-merah"
+                    tab === t ? "bg-white/25" : "bg-red-100 text-primary"
                   }`}
                 >
                   {jumlahTab(t)}

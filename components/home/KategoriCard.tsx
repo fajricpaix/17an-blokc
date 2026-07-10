@@ -21,7 +21,7 @@ export default function KategoriCard({
 }) {
   return (
     <div className="group flex h-full flex-col rounded-2xl border border-red-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-red-200 hover:shadow-xl hover:shadow-red-900/5">
-      <h4 className="mb-3 flex items-center gap-2 border-b border-red-100 pb-2.5 font-bold text-merah-tua capitalize">
+      <h4 className="mb-3 flex items-center gap-2 border-b border-red-100 pb-2.5 font-bold text-dark-primary capitalize">
         <span className="inline-block text-xl transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-6">
           {EMOJI_KATEGORI[kategori]}
         </span>
@@ -48,9 +48,9 @@ export default function KategoriCard({
       {pesertas && (
         <div className="mt-auto pt-4">
           <div className="border-t border-red-100 pt-3">
-            <h5 className="mb-2 flex items-center justify-between gap-2 text-sm font-bold text-merah-tua">
+            <h5 className="mb-2 flex items-center justify-between gap-2 text-sm font-bold text-dark-primary">
               <span>📝 Peserta Terdaftar</span>
-              <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs text-merah">
+              <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs text-primary">
                 <CountUp value={pesertas.length} />
               </span>
             </h5>
@@ -61,7 +61,7 @@ export default function KategoriCard({
             ) : (
               <div className="overflow-x-auto rounded-lg border border-red-100">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-red-50 text-merah-tua">
+                  <thead className="bg-red-50 text-dark-primary">
                     <tr>
                       <th className="px-2 py-1.5 font-bold">No</th>
                       <th className="px-2 py-1.5 font-bold">Nama</th>

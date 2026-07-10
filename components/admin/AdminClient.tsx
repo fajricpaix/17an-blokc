@@ -180,7 +180,7 @@ export default function AdminClient({
       <AdminHeader />
 
       {notif && (
-        <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-red-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-merah-tua shadow-2xl shadow-red-900/10 backdrop-blur print:hidden">
+        <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-red-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-dark-primary shadow-2xl shadow-red-900/10 backdrop-blur print:hidden">
           {notif}
         </div>
       )}
@@ -196,7 +196,7 @@ export default function AdminClient({
         onHapus={hapusRundown}
       />
 
-      <div className="mt-6 mb-2 pt-4 border-t border-merah">
+      <div className="mt-6 mb-2 pt-4 border-t border-primary">
         <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
       </div>
 
@@ -209,7 +209,7 @@ export default function AdminClient({
       />
 
       {tabPunyaPeserta && (
-        <div className="mb-4 pt-6 border-t border-merah">
+        <div className="mb-4 pt-6 border-t border-primary">
           <ParticipantTable
             tab={tab}
             pesertaTampil={pesertaTampil}

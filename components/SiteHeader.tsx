@@ -53,7 +53,7 @@ export default function SiteHeader() {
             />
           </span>
           <span className="leading-tight">
-            <span className="block bg-linear-to-r from-merah-tua via-merah to-rose-500 bg-clip-text text-base font-extrabold text-transparent sm:text-lg">
+            <span className="block bg-linear-to-r from-dark-primary via-primary to-rose-500 bg-clip-text text-base font-extrabold text-transparent sm:text-lg">
               17an Blok C
             </span>
             <span className="block text-[11px] font-semibold tracking-[0.18em] text-gray-500 uppercase">
@@ -65,12 +65,12 @@ export default function SiteHeader() {
         {isAdmin ? (
           <button
             onClick={logout}
-            className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-white/80 px-4 py-1.5 text-sm font-bold text-merah shadow-sm transition-colors duration-200 hover:bg-red-50"
+            className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-white/80 px-4 py-1.5 text-sm font-bold text-primary shadow-sm transition-colors duration-200 hover:bg-red-50"
           >
             Keluar
           </button>
         ) : (
-          <span className="items-center gap-2 rounded-full border border-red-100 bg-white/80 px-4 py-1.5 text-sm font-bold text-merah shadow-sm inline-flex">
+          <span className="items-center gap-2 rounded-full border border-red-100 bg-white/80 px-4 py-1.5 text-sm font-bold text-primary shadow-sm inline-flex">
             <span className="inline-block origin-bottom-left animate-wave">
               🇮🇩
             </span>

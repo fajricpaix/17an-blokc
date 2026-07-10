@@ -10,7 +10,7 @@ export default function HeroSection({
   onTambahLombaClick: () => void;
 }) {
   return (
-    <header className="relative -mx-4 mb-12 overflow-hidden bg-linear-to-br from-merah-tua via-merah to-rose-500 bg-size-[200%_200%] px-4 pt-16 pb-20 text-center text-white animate-gradient-x">
+    <header className="relative -mx-4 mb-12 overflow-hidden bg-linear-to-br from-dark-primary via-primary to-rose-500 bg-size-[200%_200%] px-4 pt-16 pb-20 text-center text-white animate-gradient-x">
       {/* dekorasi melayang */}
       <span
         aria-hidden
@@ -59,7 +59,7 @@ export default function HeroSection({
         <div className="mt-8 flex flex-wrap justify-center gap-3 animate-fade-up [animation-delay:360ms]">
           <button
             onClick={onDaftarClick}
-            className="rounded-full bg-white px-7 py-3.5 font-bold text-merah shadow-xl shadow-red-950/20 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-2xl active:scale-95"
+            className="rounded-full bg-white px-7 py-3.5 font-bold text-primary shadow-xl shadow-red-950/20 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-2xl active:scale-95"
           >
             🏁 Daftarkan Anak Ikut Lomba
           </button>
@@ -87,7 +87,7 @@ export default function HeroSection({
       {/* lengkung bawah */}
       <svg
         aria-hidden
-        className="absolute bottom-0 left-0 w-full text-krem"
+        className="absolute bottom-0 left-0 w-full text-secondary"
         viewBox="0 0 1440 48"
         fill="currentColor"
         preserveAspectRatio="none"

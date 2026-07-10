@@ -47,32 +47,32 @@ export default function TambahRundownModal({
         <div className="flex gap-3">
           <div className="flex-1">
             <label className="mb-1 block text-sm font-semibold">
-              Jam Mulai <span className="text-merah">*</span>
+              Jam Mulai <span className="text-primary">*</span>
             </label>
             <input
               type="time"
               required
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
             />
           </div>
           <div className="flex-1">
             <label className="mb-1 block text-sm font-semibold">
-              Jam Selesai <span className="text-merah">*</span>
+              Jam Selesai <span className="text-primary">*</span>
             </label>
             <input
               type="time"
               required
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
             />
           </div>
         </div>
         <div>
           <label className="mb-1 block text-sm font-semibold">
-            Nama Rundown <span className="text-merah">*</span>
+            Nama Rundown <span className="text-primary">*</span>
           </label>
           <input
             type="text"
@@ -80,7 +80,7 @@ export default function TambahRundownModal({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Contoh: Senam Bersama"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           />
         </div>
         <div>
@@ -92,15 +92,15 @@ export default function TambahRundownModal({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Detail singkat kegiatan..."
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-merah focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none"
           />
         </div>
-        {error && <p className="text-sm font-medium text-merah">{error}</p>}
+        {error && <p className="text-sm font-medium text-primary">{error}</p>}
         <div className="flex gap-3 pt-1">
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 rounded-lg bg-merah px-4 py-2 font-bold text-white hover:bg-merah-tua disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-dark-primary disabled:opacity-60"
           >
             {loading ? "Menyimpan..." : "Simpan Rundown Baru"}
           </button>

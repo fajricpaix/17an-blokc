@@ -26,7 +26,7 @@ export default function LombaSection({
   return (
     <section className="mb-14">
       <Reveal>
-        <h2 className="mb-1 text-2xl font-extrabold text-merah sm:text-3xl">
+        <h2 className="mb-1 text-2xl font-extrabold text-primary sm:text-3xl">
           🏆 Jenis-Jenis Lomba
         </h2>
         <p className="mb-5 text-gray-600">
@@ -41,7 +41,7 @@ export default function LombaSection({
             <p className="text-sm text-gray-600">
               Daftar peserta diperbarui otomatis <br /> 
               total{" "}
-              <strong className="text-merah-tua">
+              <strong className="text-dark-primary">
                 <CountUp value={pesertas.length} />
               </strong>{" "}
               anak terdaftar.
@@ -49,7 +49,7 @@ export default function LombaSection({
           </div>
           <button
             onClick={onDaftarClick}
-            className="rounded-full text-xs sm:text-sm bg-merah px-5 py-2.5 font-bold text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:bg-merah-tua active:scale-95"
+            className="rounded-full text-xs sm:text-sm bg-primary px-5 py-2.5 font-bold text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:bg-dark-primary active:scale-95"
           >
             + Daftarkan Anak
           </button>
