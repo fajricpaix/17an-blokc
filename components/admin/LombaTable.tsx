@@ -1,19 +1,26 @@
-import { Competition, CATEGORY_LABELS } from "@/lib/types";
+import { Competition, Participant, CATEGORY_LABELS } from "@/lib/types";
 import { Tab } from "./CategoryTabs";
 
 export default function LombaTable({
   tab,
   lombaTampil,
+  pesertas,
   busyId,
+  onLihatPeserta,
   onEdit,
   onHapus,
 }: {
   tab: Tab;
   lombaTampil: Competition[];
+  pesertas: Participant[];
   busyId: string | null;
+  onLihatPeserta: (l: Competition) => void;
   onEdit: (l: Competition) => void;
   onHapus: (l: Competition) => void;
 }) {
+  const jumlahPeserta = (l: Competition) =>
+    pesertas.filter((p) => p.category === l.category).length;
+
   return (
     <section className="mb-8 print:hidden">
       <h2 className="mb-1 text-xl font-extrabold text-primary">
@@ -30,6 +37,7 @@ export default function LombaTable({
               <th className="px-4 py-3">No</th>
               <th className="px-4 py-3">Nama Lomba</th>
               <th className="px-4 py-3">Kategori</th>
+              <th className="px-4 py-3">Jumlah Peserta</th>
               <th className="px-4 py-3">Deskripsi</th>
               <th className="px-4 py-3">Aksi</th>
             </tr>
@@ -38,7 +46,7 @@ export default function LombaTable({
             {lombaTampil.length === 0 ? (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="px-4 py-8 text-center text-gray-400 italic"
                 >
                   Belum ada lomba di kategori ini.
@@ -56,6 +64,14 @@ export default function LombaTable({
                   <td className="px-4 py-3 font-semibold">{l.name}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     {CATEGORY_LABELS[l.category]}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => onLihatPeserta(l)}
+                      className="font-semibold text-dark-primary underline decoration-red-200 underline-offset-2 transition-colors hover:text-primary"
+                    >
+                      {jumlahPeserta(l)} orang
+                    </button>
                   </td>
                   <td className="max-w-xs px-4 py-3 text-gray-600">
                     {l.description || "-"}

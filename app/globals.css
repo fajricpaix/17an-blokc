@@ -10,6 +10,7 @@
   --animate-fade-in: fade-in 0.35s ease-out both;
   --animate-pop-in: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-slide-down: slide-down 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-up: slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-float: float 7s ease-in-out infinite;
   --animate-float-slow: float 12s ease-in-out infinite;
   --animate-wave: wave 2.4s ease-in-out infinite;
@@ -47,6 +48,16 @@
     from {
       opacity: 0;
       transform: translateY(-24px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.97);
     }
     to {
       opacity: 1;

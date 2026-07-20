@@ -52,3 +52,33 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   Ibu: "Ibu-Ibu",
   Pasangan: "Pasangan (Suami-Istri)",
 };
+
+// Lomba antar blok: perlombaan tingkat RW/lingkungan yang diikuti Blok C
+// sebagai perwakilan, terpisah dari lomba internal Blok C di atas.
+// Jenis lombanya dikelola dinamis lewat admin (bukan daftar tetap),
+// jadi disimpan sebagai data (nama + ikon) bukan union type.
+export interface KategoriAntarBlok {
+  id: string;
+  name: string;
+  icon: string;
+  // Tanggal pelaksanaan lomba (opsional, format ISO "YYYY-MM-DD").
+  tanggalMulai?: string;
+  tanggalSelesai?: string;
+  // Kalau true, peserta baru tidak bisa lagi ditambahkan ke cabor ini.
+  locked?: boolean;
+}
+
+// Nama kategori yang butuh input kelas peserta saat pendaftaran perwakilan.
+export const KATEGORI_ANTAR_BLOK_BUTUH_KELAS = "Futsal Junior";
+
+export interface Perwakilan {
+  id: string;
+  name: string;
+  // Kelas hanya diisi jika salah satu categories == KATEGORI_ANTAR_BLOK_BUTUH_KELAS.
+  kelas?: string;
+  block: string;
+  houseNumber: string;
+  // Satu peserta bisa ikut lebih dari satu cabor.
+  categories: string[];
+  registeredAt: string;
+}

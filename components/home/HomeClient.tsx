@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Competition, Participant, Rundown } from "@/lib/types";
 import DaftarAnakModal from "@/components/DaftarAnakModal";
 import TambahLombaModal from "@/components/TambahLombaModal";
+import TwibbonModal from "@/components/TwibbonModal";
+import TwibbonFab from "@/components/TwibbonFab";
 import HeroSection from "./HeroSection";
 import RundownSection from "./RundownSection";
 import LombaSection from "./LombaSection";
@@ -24,6 +26,7 @@ export default function HomeClient({
   const [isAdmin, setIsAdmin] = useState(false);
   const [showDaftar, setShowDaftar] = useState(false);
   const [showTambahLomba, setShowTambahLomba] = useState(false);
+  const [showTwibbon, setShowTwibbon] = useState(false);
   const [notif, setNotif] = useState("");
 
   const refresh = useCallback(async () => {
@@ -56,7 +59,7 @@ export default function HomeClient({
   }
 
   return (
-    <main className="mx-auto w-full sm:max-w-6xl flex-1 px-4 pb-16">
+    <main className="mx-auto w-full sm:max-w-6xl flex-1 px-4 pb-24 sm:pb-16">
       {/* Toast Notifikasi */}
       {notif && (
         <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-green-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-green-800 shadow-2xl shadow-green-900/10 backdrop-blur">
@@ -80,6 +83,8 @@ export default function HomeClient({
 
       <SiteFooter />
 
+      <TwibbonFab onClick={() => setShowTwibbon(true)} />
+
       {showDaftar && (
         <DaftarAnakModal
           onClose={() => setShowDaftar(false)}
@@ -98,6 +103,7 @@ export default function HomeClient({
           }}
         />
       )}
+      {showTwibbon && <TwibbonModal onClose={() => setShowTwibbon(false)} />}
     </main>
   );
 }

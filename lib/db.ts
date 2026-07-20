@@ -1,4 +1,10 @@
-import { Competition, Participant, Rundown } from "./types";
+import {
+  Competition,
+  KategoriAntarBlok,
+  Participant,
+  Perwakilan,
+  Rundown,
+} from "./types";
 
 // Semua akses data berjalan di server (Server Component / Route Handler),
 // jadi pakai REST API Realtime Database via fetch, bukan SDK client
@@ -89,6 +95,104 @@ export async function deleteParticipant(id: string): Promise<boolean> {
   );
   if (!existing) return false;
   await dbFetch(`participants/${id}`, { method: "DELETE" });
+  return true;
+}
+
+export async function getKategoriAntarBlok(): Promise<KategoriAntarBlok[]> {
+  const val = await dbFetch<Record<
+    string,
+    Omit<KategoriAntarBlok, "id">
+  > | null>("kategoriAntarBlok");
+  return snapshotToList<KategoriAntarBlok>(val);
+}
+
+export async function addKategoriAntarBlok(
+  data: Omit<KategoriAntarBlok, "id">
+): Promise<KategoriAntarBlok> {
+  const { name } = await dbFetch<{ name: string }>("kategoriAntarBlok", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return { id: name, ...data };
+}
+
+export async function updateKategoriAntarBlok(
+  id: string,
+  data: {
+    name?: string;
+    icon?: string;
+    tanggalMulai?: string | null;
+    tanggalSelesai?: string | null;
+    locked?: boolean;
+  }
+): Promise<boolean> {
+  const existing = await dbFetch<Omit<KategoriAntarBlok, "id"> | null>(
+    `kategoriAntarBlok/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`kategoriAntarBlok/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  return true;
+}
+
+export async function deleteKategoriAntarBlok(id: string): Promise<boolean> {
+  const existing = await dbFetch<Omit<KategoriAntarBlok, "id"> | null>(
+    `kategoriAntarBlok/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`kategoriAntarBlok/${id}`, { method: "DELETE" });
+  return true;
+}
+
+export async function getPerwakilan(): Promise<Perwakilan[]> {
+  const val = await dbFetch<Record<string, Omit<Perwakilan, "id">> | null>(
+    "perwakilan"
+  );
+  // Data lama (sebelum satu peserta bisa ikut > 1 cabor) masih pakai field
+  // "category" tunggal, bukan "categories" array. Normalisasi di sini.
+  return snapshotToList<Perwakilan>(val).map((p) => {
+    const legacy = p as Perwakilan & { category?: string };
+    if (!Array.isArray(legacy.categories)) {
+      return { ...legacy, categories: legacy.category ? [legacy.category] : [] };
+    }
+    return legacy;
+  });
+}
+
+export async function addPerwakilan(
+  data: Omit<Perwakilan, "id" | "registeredAt">
+): Promise<Perwakilan> {
+  const record = { ...data, registeredAt: new Date().toISOString() };
+  const { name } = await dbFetch<{ name: string }>("perwakilan", {
+    method: "POST",
+    body: JSON.stringify(record),
+  });
+  return { id: name, ...record };
+}
+
+export async function updatePerwakilan(
+  id: string,
+  data: { categories: string[]; kelas: string | null }
+): Promise<boolean> {
+  const existing = await dbFetch<Omit<Perwakilan, "id"> | null>(
+    `perwakilan/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`perwakilan/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  return true;
+}
+
+export async function deletePerwakilan(id: string): Promise<boolean> {
+  const existing = await dbFetch<Omit<Perwakilan, "id"> | null>(
+    `perwakilan/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`perwakilan/${id}`, { method: "DELETE" });
   return true;
 }
 

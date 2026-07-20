@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
+import BottomNav from "@/components/BottomNav";
 import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
@@ -8,6 +9,10 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -46,6 +51,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans">
         <SiteHeader />
         {children}
+        <BottomNav />
         <Analytics />
       </body>
     </html>

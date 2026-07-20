@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { NAV_ITEMS } from "@/lib/nav";
 
 export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const isAdmin = pathname?.startsWith("/admin");
+  const showNav = NAV_ITEMS.some((item) => item.href === pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -78,6 +80,39 @@ export default function SiteHeader() {
           </span>
         )}
       </div>
+
+      {showNav && (
+        <nav className="hidden border-t border-red-100/70 sm:block">
+          <div className="mx-auto flex max-w-5xl items-center justify-center gap-2 px-4 py-2">
+            {NAV_ITEMS.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`group inline-flex items-center gap-2 rounded-full px-5 py-1.5 text-sm font-bold transition-all duration-300 ${
+                    active
+                      ? "bg-linear-to-r from-dark-primary via-primary to-rose-600 text-white shadow-md shadow-red-900/20"
+                      : "text-dark-primary hover:bg-red-50"
+                  }`}
+                >
+                  <span
+                    className={`inline-block transition-transform duration-300 ${
+                      active
+                        ? "scale-110"
+                        : "group-hover:scale-125 group-hover:-rotate-6"
+                    }`}
+                  >
+                    {item.emoji}
+                  </span>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+
       <div className="h-0.75 w-full bg-[linear-gradient(90deg,#c8102e,#ff5a5f,#ffffff,#ff5a5f,#c8102e)] bg-size-[200%_100%] animate-gradient-x" />
     </header>
   );

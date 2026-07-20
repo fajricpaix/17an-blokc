@@ -5,14 +5,17 @@ import { useEffect, useRef, useState } from "react";
 const ACTIONS = [
   { key: "rundown", emoji: "📋", label: "Tambah Rundown Acara" },
   { key: "lomba", emoji: "🏆", label: "Tambah Jenis Lomba" },
+  { key: "kategoriAntarBlok", emoji: "🏅", label: "Tambah Kategori Lomba Antar Blok" },
 ] as const;
 
 export default function TambahFab({
   onPilihLomba,
   onPilihRundown,
+  onPilihKategoriAntarBlok,
 }: {
   onPilihLomba: () => void;
   onPilihRundown: () => void;
+  onPilihKategoriAntarBlok: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -36,6 +39,7 @@ export default function TambahFab({
   function pilih(key: (typeof ACTIONS)[number]["key"]) {
     setOpen(false);
     if (key === "rundown") onPilihRundown();
+    else if (key === "kategoriAntarBlok") onPilihKategoriAntarBlok();
     else onPilihLomba();
   }
 
