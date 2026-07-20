@@ -7,9 +7,9 @@ const TEMPLATE_SRC = "/twibon.webp";
 const TEMPLATE_WIDTH = 1536;
 const TEMPLATE_HEIGHT = 2752;
 
-// Dikalibrasi manual terhadap public/twibon.webp — sesuaikan di sini kalau
-// template diganti.
-const PHOTO_FRAME = { x: 703, y: 754, width: 713, height: 1319, radius: 26 };
+// Dikalibrasi terhadap public/twibon.webp (diukur lewat analisis pixel) —
+// sesuaikan di sini kalau template diganti.
+const PHOTO_FRAME = { x: 726, y: 785, width: 680, height: 923, radius: 32 };
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -196,6 +196,28 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
     return TEMPLATE_WIDTH / canvas.clientWidth;
   }
 
+  // Foto tidak boleh digeser/zoom-out sampai ada bagian frame yang kosong —
+  // batasi offset supaya foto selalu menutupi seluruh area yang disediakan.
+  function clampOffset(
+    raw: { x: number; y: number },
+    z: number,
+    img: HTMLImageElement
+  ) {
+    const coverScale = Math.max(
+      PHOTO_FRAME.width / img.width,
+      PHOTO_FRAME.height / img.height
+    );
+    const scale = coverScale * z;
+    const drawW = img.width * scale;
+    const drawH = img.height * scale;
+    const maxX = Math.max(0, (drawW - PHOTO_FRAME.width) / 2);
+    const maxY = Math.max(0, (drawH - PHOTO_FRAME.height) / 2);
+    return {
+      x: Math.min(maxX, Math.max(-maxX, raw.x)),
+      y: Math.min(maxY, Math.max(-maxY, raw.y)),
+    };
+  }
+
   function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
     if (!fotoImg) return;
     (e.target as HTMLCanvasElement).setPointerCapture(e.pointerId);
@@ -207,14 +229,20 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
   }
 
   function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
-    if (!dragState.current) return;
+    if (!dragState.current || !fotoImg) return;
     const scale = toCanvasScale();
     const dx = (e.clientX - dragState.current.startX) * scale;
     const dy = (e.clientY - dragState.current.startY) * scale;
-    setOffset({
-      x: dragState.current.startOffset.x + dx,
-      y: dragState.current.startOffset.y + dy,
-    });
+    setOffset(
+      clampOffset(
+        {
+          x: dragState.current.startOffset.x + dx,
+          y: dragState.current.startOffset.y + dy,
+        },
+        zoom,
+        fotoImg
+      )
+    );
   }
 
   function handlePointerUp() {
@@ -262,7 +290,11 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
             max={3}
             step={0.01}
             value={zoom}
-            onChange={(e) => setZoom(Number(e.target.value))}
+            onChange={(e) => {
+              const z = Number(e.target.value);
+              setZoom(z);
+              if (fotoImg) setOffset((prev) => clampOffset(prev, z, fotoImg));
+            }}
             className="w-full accent-primary"
           />
         </div>
