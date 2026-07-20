@@ -4,6 +4,7 @@ import {
   Participant,
   Perwakilan,
   Rundown,
+  Sponsor,
 } from "./types";
 
 // Semua akses data berjalan di server (Server Component / Route Handler),
@@ -194,6 +195,34 @@ export async function deletePerwakilan(id: string): Promise<boolean> {
   if (!existing) return false;
   await dbFetch(`perwakilan/${id}`, { method: "DELETE" });
   return true;
+}
+
+export async function getSponsors(): Promise<Sponsor[]> {
+  const val = await dbFetch<Record<string, Omit<Sponsor, "id">> | null>(
+    "sponsors"
+  );
+  return snapshotToList<Sponsor>(val).sort((a, b) =>
+    a.createdAt.localeCompare(b.createdAt)
+  );
+}
+
+export async function addSponsor(
+  data: Omit<Sponsor, "id">
+): Promise<Sponsor> {
+  const { name } = await dbFetch<{ name: string }>("sponsors", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return { id: name, ...data };
+}
+
+export async function deleteSponsor(id: string): Promise<Sponsor | null> {
+  const existing = await dbFetch<Omit<Sponsor, "id"> | null>(
+    `sponsors/${id}`
+  );
+  if (!existing) return null;
+  await dbFetch(`sponsors/${id}`, { method: "DELETE" });
+  return { id, ...existing };
 }
 
 export async function getRundowns(): Promise<Rundown[]> {

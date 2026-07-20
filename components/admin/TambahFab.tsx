@@ -6,16 +6,19 @@ const ACTIONS = [
   { key: "rundown", emoji: "📋", label: "Tambah Rundown Acara" },
   { key: "lomba", emoji: "🏆", label: "Tambah Jenis Lomba" },
   { key: "kategoriAntarBlok", emoji: "🏅", label: "Tambah Kategori Lomba Antar Blok" },
+  { key: "sponsor", emoji: "🤝", label: "Tambah Sponsor" },
 ] as const;
 
 export default function TambahFab({
   onPilihLomba,
   onPilihRundown,
   onPilihKategoriAntarBlok,
+  onPilihSponsor,
 }: {
   onPilihLomba: () => void;
   onPilihRundown: () => void;
   onPilihKategoriAntarBlok: () => void;
+  onPilihSponsor: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -40,6 +43,7 @@ export default function TambahFab({
     setOpen(false);
     if (key === "rundown") onPilihRundown();
     else if (key === "kategoriAntarBlok") onPilihKategoriAntarBlok();
+    else if (key === "sponsor") onPilihSponsor();
     else onPilihLomba();
   }
 

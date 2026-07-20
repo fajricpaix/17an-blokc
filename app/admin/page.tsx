@@ -6,6 +6,7 @@ import {
   getParticipants,
   getPerwakilan,
   getRundowns,
+  getSponsors,
 } from "@/lib/db";
 import AdminClient from "@/components/admin/AdminClient";
 
@@ -15,14 +16,21 @@ export default async function AdminPage() {
   if (!(await isAdmin())) {
     redirect("/login");
   }
-  const [competitions, participants, kategoriAntarBlok, perwakilans, rundowns] =
-    await Promise.all([
-      getCompetitions(),
-      getParticipants(),
-      getKategoriAntarBlok(),
-      getPerwakilan(),
-      getRundowns(),
-    ]);
+  const [
+    competitions,
+    participants,
+    kategoriAntarBlok,
+    perwakilans,
+    rundowns,
+    sponsors,
+  ] = await Promise.all([
+    getCompetitions(),
+    getParticipants(),
+    getKategoriAntarBlok(),
+    getPerwakilan(),
+    getRundowns(),
+    getSponsors(),
+  ]);
   return (
     <AdminClient
       initialLombas={competitions}
@@ -30,6 +38,7 @@ export default async function AdminPage() {
       initialKategoriAntarBlok={kategoriAntarBlok}
       initialPerwakilans={perwakilans}
       initialRundowns={rundowns}
+      initialSponsors={sponsors}
     />
   );
 }

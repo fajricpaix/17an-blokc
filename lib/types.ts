@@ -82,3 +82,11 @@ export interface Perwakilan {
   categories: string[];
   registeredAt: string;
 }
+
+export interface Sponsor {
+  id: string;
+  name: string;
+  // Path publik ke file logo, mis. "/sponsor/bank-serpong-172233.png".
+  logoUrl: string;
+  createdAt: string;
+}

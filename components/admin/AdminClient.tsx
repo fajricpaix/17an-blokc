@@ -1,28 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import EditPerwakilanModal from "@/components/EditPerwakilanModal";
+import PesertaKategoriModal from "@/components/PesertaKategoriModal";
+import PesertaLombaModal from "@/components/PesertaLombaModal";
+import TambahKategoriAntarBlokModal from "@/components/TambahKategoriAntarBlokModal";
+import TambahLombaModal from "@/components/TambahLombaModal";
+import TambahRundownModal from "@/components/TambahRundownModal";
+import TambahSponsorModal from "@/components/TambahSponsorModal";
 import {
+  Category,
+  CATEGORY_LABELS,
+  CHILD_CATEGORIES,
   Competition,
   KategoriAntarBlok,
   Participant,
   Perwakilan,
   Rundown,
-  Category,
-  CHILD_CATEGORIES,
-  CATEGORY_LABELS,
+  Sponsor,
 } from "@/lib/types";
-import TambahLombaModal from "@/components/TambahLombaModal";
-import TambahRundownModal from "@/components/TambahRundownModal";
-import TambahKategoriAntarBlokModal from "@/components/TambahKategoriAntarBlokModal";
-import EditPerwakilanModal from "@/components/EditPerwakilanModal";
-import PesertaKategoriModal from "@/components/PesertaKategoriModal";
-import PesertaLombaModal from "@/components/PesertaLombaModal";
+import { useState } from "react";
 import AdminHeader from "./AdminHeader";
-import CategoryTabs, { Tab } from "./CategoryTabs";
-import LombaTable from "./LombaTable";
-import ParticipantTable from "./ParticipantTable";
-import RundownTable from "./RundownTable";
+import { Tab } from "./CategoryTabs";
 import KategoriAntarBlokTable from "./KategoriAntarBlokTable";
+import LombaTable from "./LombaTable";
+import RundownTable from "./RundownTable";
+import SponsorTable from "./SponsorTable";
 import TambahFab from "./TambahFab";
 
 export default function AdminClient({
@@ -31,12 +33,14 @@ export default function AdminClient({
   initialKategoriAntarBlok,
   initialPerwakilans,
   initialRundowns,
+  initialSponsors,
 }: {
   initialLombas: Competition[];
   initialPesertas: Participant[];
   initialKategoriAntarBlok: KategoriAntarBlok[];
   initialPerwakilans: Perwakilan[];
   initialRundowns: Rundown[];
+  initialSponsors: Sponsor[];
 }) {
   const [lombas, setLombas] = useState(initialLombas);
   const [pesertas, setPesertas] = useState(initialPesertas);
@@ -45,11 +49,13 @@ export default function AdminClient({
   );
   const [perwakilans, setPerwakilans] = useState(initialPerwakilans);
   const [rundowns, setRundowns] = useState(initialRundowns);
+  const [sponsors, setSponsors] = useState(initialSponsors);
   const [tab, setTab] = useState<Tab>("Semua");
   const [showTambahLomba, setShowTambahLomba] = useState(false);
   const [showTambahRundown, setShowTambahRundown] = useState(false);
   const [showTambahKategoriAntarBlok, setShowTambahKategoriAntarBlok] =
     useState(false);
+  const [showTambahSponsor, setShowTambahSponsor] = useState(false);
   const [editLomba, setEditLomba] = useState<Competition | null>(null);
   const [lihatPesertaLomba, setLihatPesertaLomba] =
     useState<Competition | null>(null);
@@ -92,6 +98,38 @@ export default function AdminClient({
       if (res.ok) setKategoriAntarBlok(await res.json());
     } catch {
       // biarkan data lama jika gagal
+    }
+  }
+
+  async function refreshSponsors() {
+    try {
+      const res = await fetch("/api/sponsors");
+      if (res.ok) setSponsors(await res.json());
+    } catch {
+      // biarkan data lama jika gagal
+    }
+  }
+
+  async function hapusSponsor(s: Sponsor) {
+    if (!confirm(`Hapus sponsor "${s.name}"?`)) {
+      return;
+    }
+    setBusyId(s.id);
+    try {
+      const res = await fetch(`/api/sponsors/${s.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        tampilkanNotif(`⚠️ ${data.error ?? "Gagal menghapus sponsor."}`);
+        return;
+      }
+      setSponsors((prev) => prev.filter((x) => x.id !== s.id));
+      tampilkanNotif(`🗑️ Sponsor "${s.name}" berhasil dihapus.`);
+    } catch {
+      tampilkanNotif("⚠️ Gagal terhubung ke server.");
+    } finally {
+      setBusyId(null);
     }
   }
 
@@ -300,6 +338,7 @@ export default function AdminClient({
         onPilihLomba={() => setShowTambahLomba(true)}
         onPilihRundown={() => setShowTambahRundown(true)}
         onPilihKategoriAntarBlok={() => setShowTambahKategoriAntarBlok(true)}
+        onPilihSponsor={() => setShowTambahSponsor(true)}
       />
 
       <RundownTable rundowns={rundowns} />
@@ -316,10 +355,6 @@ export default function AdminClient({
         />
       </div>
 
-      <div className="mt-6 mb-2 pt-4 border-t border-primary print:hidden">
-        <CategoryTabs tab={tab} onTabChange={setTab} jumlahTab={jumlahTab} />
-      </div>
-
       <LombaTable
         tab={tab}
         lombaTampil={lombaTampil}
@@ -330,22 +365,13 @@ export default function AdminClient({
         onHapus={hapusLomba}
       />
 
-      {tabPunyaPeserta && (
-        <div
-          className={`mb-4 pt-6 border-t border-primary print:border-t-0 print:pt-0 ${
-            sedangLihatPesertaModal ? "print:hidden" : ""
-          }`}
-        >
-          <ParticipantTable
-            tab={tab}
-            pesertaTampil={pesertaTampil}
-            busyId={busyId}
-            onDownload={downloadPeserta}
-            onPrint={cetakPesertaPDF}
-            onHapus={hapusPeserta}
-          />
-        </div>
-      )}
+      <div className="mb-4 pt-6 border-t border-primary print:hidden">
+        <SponsorTable
+          sponsors={sponsors}
+          busyId={busyId}
+          onHapus={hapusSponsor}
+        />
+      </div>
 
       {showTambahLomba && (
         <TambahLombaModal
@@ -381,6 +407,15 @@ export default function AdminClient({
           onSuccess={() => {
             refreshKategoriAntarBlok();
             tampilkanNotif("✅ Kategori lomba antar blok berhasil disimpan.");
+          }}
+        />
+      )}
+      {showTambahSponsor && (
+        <TambahSponsorModal
+          onClose={() => setShowTambahSponsor(false)}
+          onSuccess={() => {
+            refreshSponsors();
+            tampilkanNotif("✅ Sponsor baru berhasil disimpan.");
           }}
         />
       )}
