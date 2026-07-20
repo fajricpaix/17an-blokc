@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Modal from "./Modal";
+import { Sponsor } from "@/lib/types";
 
 const TEMPLATE_SRC = "/twibon.webp";
 const TEMPLATE_WIDTH = 1536;
@@ -10,6 +11,7 @@ const TEMPLATE_HEIGHT = 2752;
 // Dikalibrasi terhadap public/twibon.webp (diukur lewat analisis pixel) —
 // sesuaikan di sini kalau template diganti.
 const PHOTO_FRAME = { x: 726, y: 785, width: 680, height: 923, radius: 32 };
+const SPONSOR_BOX = { x: 90, y: 2085, width: 1355, height: 465 };
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -83,10 +85,80 @@ function drawTextOverlays(ctx: CanvasRenderingContext2D) {
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
   ctx.fillText(
-    "#HUTRI81 #17AGUSTUS #MERDEKA #BLOKPELICAN #SERPONGLAGOON",
+    "#HUTRI81 #MERDEKA #BLOKCPELICAN #SERPONGLAGOON",
     TEMPLATE_WIDTH / 2,
     barY + 16
   );
+  ctx.restore();
+}
+
+function chunkRows<T>(items: T[]): T[][] {
+  if (items.length <= 5) return [items];
+  const perRow = Math.ceil(items.length / 2);
+  return [items.slice(0, perRow), items.slice(perRow)];
+}
+
+function drawContain(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  cx: number,
+  cy: number,
+  box: number
+) {
+  const scale = Math.min(box / img.width, box / img.height);
+  const w = img.width * scale;
+  const h = img.height * scale;
+  ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+}
+
+function drawSponsors(
+  ctx: CanvasRenderingContext2D,
+  sponsors: Sponsor[],
+  images: Record<string, HTMLImageElement>
+) {
+  const centerX = SPONSOR_BOX.x + SPONSOR_BOX.width / 2;
+
+  ctx.save();
+  ctx.fillStyle = "#9e0c24";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.font = "bold 58px Arial, sans-serif";
+  const titleY = SPONSOR_BOX.y + 32;
+  ctx.fillText("Sponsor 17an Pelican C", centerX, titleY);
+  ctx.restore();
+
+  const loaded = sponsors.filter((s) => images[s.id]);
+  if (loaded.length === 0) return;
+
+  const rows = chunkRows(loaded);
+  const logoSize = rows.length === 1 ? 160 : 120;
+  const itemHeight = logoSize;
+  const rowGap = 24;
+  const totalRowsHeight =
+    rows.length * itemHeight + (rows.length - 1) * rowGap;
+
+  const contentTop = titleY + 78;
+  const contentBottom = SPONSOR_BOX.y + SPONSOR_BOX.height - 24;
+  const availableHeight = Math.max(0, contentBottom - contentTop);
+  const rowsTop =
+    contentTop + Math.max(0, (availableHeight - totalRowsHeight) / 2);
+
+  ctx.save();
+  rows.forEach((rowSponsors, rowIdx) => {
+    const rowY = rowsTop + rowIdx * (itemHeight + rowGap);
+    const itemWidth = Math.min(
+      240,
+      (SPONSOR_BOX.width - 60) / rowSponsors.length
+    );
+    let itemX = centerX - (itemWidth * rowSponsors.length) / 2;
+
+    rowSponsors.forEach((s) => {
+      const cx = itemX + itemWidth / 2;
+      const img = images[s.id];
+      drawContain(ctx, img, cx, rowY + logoSize / 2, logoSize);
+      itemX += itemWidth;
+    });
+  });
   ctx.restore();
 }
 
@@ -104,6 +176,10 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
   const [zoom, setZoom] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [error, setError] = useState("");
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [sponsorImages, setSponsorImages] = useState<
+    Record<string, HTMLImageElement>
+  >({});
 
   useEffect(() => {
     loadImage(TEMPLATE_SRC)
@@ -115,9 +191,34 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
   }, []);
 
   useEffect(() => {
+    fetch("/api/sponsors")
+      .then((r) => (r.ok ? r.json() : []))
+      .then(async (list: Sponsor[]) => {
+        setSponsors(list);
+        const loaded = await Promise.all(
+          list.map(async (s) => {
+            try {
+              return [s.id, await loadImage(s.logoUrl)] as const;
+            } catch {
+              return null;
+            }
+          })
+        );
+        const map: Record<string, HTMLImageElement> = {};
+        for (const entry of loaded) {
+          if (entry) map[entry[0]] = entry[1];
+        }
+        setSponsorImages(map);
+      })
+      .catch(() => {
+        // biarkan tanpa sponsor kalau gagal dimuat
+      });
+  }, []);
+
+  useEffect(() => {
     render();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [templateReady, fotoImg, zoom, offset]);
+  }, [templateReady, fotoImg, zoom, offset, sponsors, sponsorImages]);
 
   function render() {
     const canvas = canvasRef.current;
@@ -173,6 +274,7 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
     ctx.restore();
 
     drawTextOverlays(ctx);
+    drawSponsors(ctx, sponsors, sponsorImages);
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -318,7 +420,7 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
           disabled={!fotoImg}
           className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white transition-colors hover:bg-dark-primary disabled:cursor-not-allowed disabled:opacity-50"
         >
-          ⬇️ Unduh Twibbon
+          ⬇️ Unduh
         </button>
       </div>
       {fotoImg && (
