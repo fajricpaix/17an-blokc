@@ -9,11 +9,13 @@ export default function Modal({
   title,
   onClose,
   children,
+  footer,
   size = "md",
 }: {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  footer?: React.ReactNode;
   size?: keyof typeof SIZE_CLASS;
 }) {
   return (
@@ -36,6 +38,11 @@ export default function Modal({
           </button>
         </div>
         <div className="overflow-y-auto p-5 print:overflow-visible">{children}</div>
+        {footer && (
+          <div className="shrink-0 rounded-b-2xl border-t border-red-100 bg-white p-5 print:hidden">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

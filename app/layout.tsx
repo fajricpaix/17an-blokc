@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import BottomNav from "@/components/BottomNav";
+import TwibbonLauncher from "@/components/TwibbonLauncher";
 import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <BottomNav />
+        <TwibbonLauncher />
         <Analytics />
       </body>
     </html>

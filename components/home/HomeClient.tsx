@@ -4,8 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Competition, Participant, Rundown } from "@/lib/types";
 import DaftarAnakModal from "@/components/DaftarAnakModal";
 import TambahLombaModal from "@/components/TambahLombaModal";
-import TwibbonModal from "@/components/TwibbonModal";
-import TwibbonFab from "@/components/TwibbonFab";
 import HeroSection from "./HeroSection";
 import RundownSection from "./RundownSection";
 import LombaSection from "./LombaSection";
@@ -26,7 +24,6 @@ export default function HomeClient({
   const [isAdmin, setIsAdmin] = useState(false);
   const [showDaftar, setShowDaftar] = useState(false);
   const [showTambahLomba, setShowTambahLomba] = useState(false);
-  const [showTwibbon, setShowTwibbon] = useState(false);
   const [notif, setNotif] = useState("");
 
   const refresh = useCallback(async () => {
@@ -83,8 +80,6 @@ export default function HomeClient({
 
       <SiteFooter />
 
-      <TwibbonFab onClick={() => setShowTwibbon(true)} />
-
       {showDaftar && (
         <DaftarAnakModal
           onClose={() => setShowDaftar(false)}
@@ -103,7 +98,6 @@ export default function HomeClient({
           }}
         />
       )}
-      {showTwibbon && <TwibbonModal onClose={() => setShowTwibbon(false)} />}
     </main>
   );
 }

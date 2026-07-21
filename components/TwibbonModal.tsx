@@ -361,7 +361,39 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <Modal title="🖼️ Buat Twibbon 17an Blok C" onClose={onClose} size="lg">
+    <Modal
+      title="🖼️ Buat Twibbon 17an Blok C"
+      onClose={onClose}
+      size="lg"
+      footer={
+        <>
+          <div className="flex flex-wrap gap-3">
+            <label className="flex-1 cursor-pointer rounded-lg border border-red-200 bg-white px-4 py-2 text-center font-bold text-dark-primary transition-colors hover:bg-red-50">
+              📷 {fotoImg ? "Ganti Foto" : "Pilih Foto"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={!fotoImg}
+              className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white transition-colors hover:bg-dark-primary disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              ⬇️ Unduh
+            </button>
+          </div>
+          {fotoImg && (
+            <p className="mt-2 text-center text-xs text-gray-500">
+              Geser foto untuk atur posisi, pakai slider untuk zoom.
+            </p>
+          )}
+        </>
+      }
+    >
       <p className="mb-4 text-sm text-gray-600">
         Upload foto kamu, atur posisinya, lalu unduh hasilnya. Foto{" "}
         <strong>tidak diunggah ke server</strong> — semua diproses langsung di
@@ -403,31 +435,6 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
       )}
 
       {error && <p className="mb-3 text-sm font-medium text-primary">{error}</p>}
-
-      <div className="flex flex-wrap gap-3">
-        <label className="flex-1 cursor-pointer rounded-lg border border-red-200 bg-white px-4 py-2 text-center font-bold text-dark-primary transition-colors hover:bg-red-50">
-          📷 {fotoImg ? "Ganti Foto" : "Pilih Foto"}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </label>
-        <button
-          type="button"
-          onClick={handleDownload}
-          disabled={!fotoImg}
-          className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white transition-colors hover:bg-dark-primary disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          ⬇️ Unduh
-        </button>
-      </div>
-      {fotoImg && (
-        <p className="mt-2 text-center text-xs text-gray-500">
-          Geser foto untuk atur posisi, pakai slider untuk zoom.
-        </p>
-      )}
     </Modal>
   );
 }
