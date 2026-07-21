@@ -173,6 +173,8 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
 
   const [templateReady, setTemplateReady] = useState(false);
   const [fotoImg, setFotoImg] = useState<HTMLImageElement | null>(null);
+  const [isPhotoLoading, setIsPhotoLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [error, setError] = useState("");
@@ -282,6 +284,7 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
     e.target.value = "";
     if (!file) return;
     setError("");
+    setIsPhotoLoading(true);
     try {
       const img = await loadImage(URL.createObjectURL(file));
       setFotoImg(img);
@@ -289,6 +292,8 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
       setOffset({ x: 0, y: 0 });
     } catch {
       setError("Gagal memuat foto. Coba file lain.");
+    } finally {
+      setIsPhotoLoading(false);
     }
   }
 
@@ -351,13 +356,27 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
     dragState.current = null;
   }
 
-  function handleDownload() {
+  async function handleDownload() {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const a = document.createElement("a");
-    a.download = "twibbon-17an-blok-c.png";
-    a.href = canvas.toDataURL("image/png");
-    a.click();
+    setError("");
+    setIsDownloading(true);
+    try {
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png")
+      );
+      if (!blob) throw new Error("Gagal membuat gambar.");
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.download = "twibbon-17an-blok-c.png";
+      a.href = url;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setError("Gagal mengunduh gambar. Coba lagi.");
+    } finally {
+      setIsDownloading(false);
+    }
   }
 
   return (
@@ -380,10 +399,10 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={handleDownload}
-              disabled={!fotoImg}
+              disabled={!fotoImg || !templateReady || isPhotoLoading || isDownloading}
               className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white transition-colors hover:bg-dark-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
-              ⬇️ Unduh
+              {isDownloading ? "⏳ Menyiapkan..." : "⬇️ Unduh"}
             </button>
           </div>
           {fotoImg && (
@@ -400,7 +419,7 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
         perangkat kamu.
       </p>
 
-      <div className="mb-4 overflow-hidden rounded-xl border border-red-100 bg-secondary">
+      <div className="relative mb-4 overflow-hidden rounded-xl border border-red-100 bg-secondary">
         <canvas
           ref={canvasRef}
           onPointerDown={handlePointerDown}
@@ -411,6 +430,11 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
             fotoImg ? "cursor-move" : ""
           }`}
         />
+        {(!templateReady || isPhotoLoading) && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm">
+            <div className="size-10 animate-spin rounded-full border-4 border-red-100 border-t-primary" />
+          </div>
+        )}
       </div>
 
       {fotoImg && (
