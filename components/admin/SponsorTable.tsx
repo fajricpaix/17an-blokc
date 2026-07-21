@@ -3,10 +3,12 @@ import { Sponsor } from "@/lib/types";
 export default function SponsorTable({
   sponsors,
   busyId,
+  onToggleActive,
   onHapus,
 }: {
   sponsors: Sponsor[];
   busyId: string | null;
+  onToggleActive: (s: Sponsor, active: boolean) => void;
   onHapus: (s: Sponsor) => void;
 }) {
   return (
@@ -23,6 +25,7 @@ export default function SponsorTable({
             <tr>
               <th className="px-4 py-3">Logo</th>
               <th className="px-4 py-3">Nama Sponsor</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Aksi</th>
             </tr>
           </thead>
@@ -30,7 +33,7 @@ export default function SponsorTable({
             {sponsors.length === 0 ? (
               <tr>
                 <td
-                  colSpan={3}
+                  colSpan={4}
                   className="px-4 py-8 text-center text-gray-400 italic"
                 >
                   Belum ada sponsor.
@@ -53,6 +56,36 @@ export default function SponsorTable({
                     />
                   </td>
                   <td className="px-4 py-3 font-semibold">{s.name}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <button
+                      type="button"
+                      onClick={() => onToggleActive(s, s.active === false)}
+                      disabled={busyId === s.id}
+                      aria-label={
+                        s.active !== false
+                          ? "Nonaktifkan sponsor"
+                          : "Aktifkan sponsor"
+                      }
+                      className={`relative h-7 w-16 shrink-0 rounded-full transition-colors duration-300 disabled:opacity-60 ${
+                        s.active !== false ? "bg-green-500" : "bg-primary"
+                      }`}
+                    >
+                      <span
+                        className={`absolute inset-0 flex items-center text-[10px] font-bold text-white ${
+                          s.active !== false
+                            ? "justify-start pl-2.5"
+                            : "justify-end pr-2.5"
+                        }`}
+                      >
+                        {s.active !== false ? "ON" : "OFF"}
+                      </span>
+                      <span
+                        className={`absolute top-0.5 size-6 rounded-full bg-white shadow-md transition-all duration-300 ${
+                          s.active !== false ? "right-0.5" : "left-0.5"
+                        }`}
+                      />
+                    </button>
+                  </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <button
                       onClick={() => onHapus(s)}

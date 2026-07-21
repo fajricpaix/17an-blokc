@@ -216,6 +216,21 @@ export async function addSponsor(
   return { id: name, ...data };
 }
 
+export async function updateSponsor(
+  id: string,
+  data: { active?: boolean }
+): Promise<boolean> {
+  const existing = await dbFetch<Omit<Sponsor, "id"> | null>(
+    `sponsors/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`sponsors/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  return true;
+}
+
 export async function deleteSponsor(id: string): Promise<Sponsor | null> {
   const existing = await dbFetch<Omit<Sponsor, "id"> | null>(
     `sponsors/${id}`

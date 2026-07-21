@@ -89,4 +89,7 @@ export interface Sponsor {
   // Path publik ke file logo, mis. "/sponsor/bank-serpong-172233.png".
   logoUrl: string;
   createdAt: string;
+  // Kalau false, sponsor disembunyikan dari twibbon & footer publik.
+  // Undefined (sponsor lama) diperlakukan sebagai aktif.
+  active?: boolean;
 }

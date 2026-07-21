@@ -196,9 +196,10 @@ export default function TwibbonModal({ onClose }: { onClose: () => void }) {
     fetch("/api/sponsors")
       .then((r) => (r.ok ? r.json() : []))
       .then(async (list: Sponsor[]) => {
-        setSponsors(list);
+        const active = list.filter((s) => s.active !== false);
+        setSponsors(active);
         const loaded = await Promise.all(
-          list.map(async (s) => {
+          active.map(async (s) => {
             try {
               return [s.id, await loadImage(s.logoUrl)] as const;
             } catch {

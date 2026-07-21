@@ -110,6 +110,34 @@ export default function AdminClient({
     }
   }
 
+  async function toggleActiveSponsor(s: Sponsor, active: boolean) {
+    setBusyId(s.id);
+    try {
+      const res = await fetch(`/api/sponsors/${s.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        tampilkanNotif(`⚠️ ${data.error ?? "Gagal mengubah status sponsor."}`);
+        return;
+      }
+      setSponsors((prev) =>
+        prev.map((x) => (x.id === s.id ? { ...x, active } : x))
+      );
+      tampilkanNotif(
+        active
+          ? `✅ Sponsor "${s.name}" diaktifkan.`
+          : `🚫 Sponsor "${s.name}" dinonaktifkan.`
+      );
+    } catch {
+      tampilkanNotif("⚠️ Gagal terhubung ke server.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   async function hapusSponsor(s: Sponsor) {
     if (!confirm(`Hapus sponsor "${s.name}"?`)) {
       return;
@@ -369,6 +397,7 @@ export default function AdminClient({
         <SponsorTable
           sponsors={sponsors}
           busyId={busyId}
+          onToggleActive={toggleActiveSponsor}
           onHapus={hapusSponsor}
         />
       </div>

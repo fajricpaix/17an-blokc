@@ -1,8 +1,35 @@
 import { NextResponse } from "next/server";
 import { unlink } from "node:fs/promises";
 import path from "node:path";
-import { deleteSponsor } from "@/lib/db";
+import { deleteSponsor, updateSponsor } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
+
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!(await isAdmin())) {
+    return NextResponse.json(
+      { error: "Hanya panitia yang boleh mengubah status sponsor." },
+      { status: 401 }
+    );
+  }
+  const body = await req.json();
+  if (typeof body.active !== "boolean") {
+    return NextResponse.json(
+      { error: "Status active wajib diisi." },
+      { status: 400 }
+    );
+  }
+  const { id } = await params;
+  if (!(await updateSponsor(id, { active: body.active }))) {
+    return NextResponse.json(
+      { error: "Sponsor tidak ditemukan." },
+      { status: 404 }
+    );
+  }
+  return NextResponse.json({ ok: true });
+}
 
 export async function DELETE(
   _req: Request,

@@ -78,6 +78,7 @@ export async function POST(req: Request) {
     name,
     logoUrl: `/sponsor/${filename}`,
     createdAt: new Date().toISOString(),
+    active: true,
   });
   return NextResponse.json(sponsor, { status: 201 });
 }
