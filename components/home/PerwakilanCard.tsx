@@ -1,11 +1,41 @@
 "use client";
 
-import { useState } from "react";
-import { KategoriAntarBlok, Perwakilan } from "@/lib/types";
+import { Fragment, useState } from "react";
+import {
+  KATEGORI_ANTAR_BLOK_BUTUH_KELAS,
+  KategoriAntarBlok,
+  Perwakilan,
+} from "@/lib/types";
 import { rentangTanggalKategori } from "@/lib/format";
 import CountUp from "@/components/CountUp";
 
 const BARIS_AWAL = 6;
+
+const KELOMPOK_KELAS = [
+  { label: "Kelas 1-3 SD", kelas: [1, 2, 3] },
+  { label: "Kelas 4-6 SD", kelas: [4, 5, 6] },
+];
+
+function nomorKelas(kelas?: string): number | null {
+  const match = kelas?.match(/\d+/);
+  return match ? Number(match[0]) : null;
+}
+
+function indexKelompok(kelas?: string): number {
+  const n = nomorKelas(kelas);
+  if (n === null) return KELOMPOK_KELAS.length;
+  const idx = KELOMPOK_KELAS.findIndex((k) => k.kelas.includes(n));
+  return idx === -1 ? KELOMPOK_KELAS.length : idx;
+}
+
+function urutkanPerKelas(pesertas: Perwakilan[]): Perwakilan[] {
+  return [...pesertas].sort((a, b) => {
+    const kelompokA = indexKelompok(a.kelas);
+    const kelompokB = indexKelompok(b.kelas);
+    if (kelompokA !== kelompokB) return kelompokA - kelompokB;
+    return (nomorKelas(a.kelas) ?? Infinity) - (nomorKelas(b.kelas) ?? Infinity);
+  });
+}
 
 export default function PerwakilanCard({
   kategori,
@@ -17,8 +47,12 @@ export default function PerwakilanCard({
   onDaftarClick: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const adaLebihBanyak = pesertas.length > BARIS_AWAL;
-  const pesertaTampil = expanded ? pesertas : pesertas.slice(0, BARIS_AWAL);
+  const isFutsalJunior = kategori.name === KATEGORI_ANTAR_BLOK_BUTUH_KELAS;
+  const pesertaUrut = isFutsalJunior ? urutkanPerKelas(pesertas) : pesertas;
+  const adaLebihBanyak = pesertaUrut.length > BARIS_AWAL;
+  const pesertaTampil = expanded
+    ? pesertaUrut
+    : pesertaUrut.slice(0, BARIS_AWAL);
   const tanggal = rentangTanggalKategori(kategori);
 
   return (
@@ -52,24 +86,38 @@ export default function PerwakilanCard({
       ) : (
         <>
           <div className="grid grid-cols-3 gap-2">
-            {pesertaTampil.map((p, i) => (
-              <div
-                key={p.id}
-                style={{ animationDelay: `${i * 40}ms` }}
-                className="animate-pop-in group/peserta flex min-w-0 flex-col items-center gap-1 rounded-xl border border-red-100 bg-white px-2 py-2.5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-md hover:shadow-red-900/10"
-              >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-dark-primary via-primary to-rose-600 text-xs font-extrabold text-white shadow-sm transition-transform duration-300 group-hover/peserta:scale-110 group-hover/peserta:-rotate-6">
-                  {p.name.charAt(0).toUpperCase()}
-                </span>
-                <p className="w-full truncate text-xs font-semibold capitalize">
-                  {p.name}
-                </p>
-                <p className="w-full truncate text-[10px] whitespace-nowrap text-gray-500 capitalize">
-                  {p.kelas ? `${p.kelas} · ` : ""}
-                  {p.block}/{p.houseNumber}
-                </p>
-              </div>
-            ))}
+            {pesertaTampil.map((p, i) => {
+              const tampilkanHeaderKelompok =
+                isFutsalJunior &&
+                (i === 0 ||
+                  indexKelompok(p.kelas) !==
+                    indexKelompok(pesertaTampil[i - 1].kelas));
+              return (
+                <Fragment key={p.id}>
+                  {tampilkanHeaderKelompok && (
+                    <p className="col-span-3 mt-2 text-[11px] font-bold tracking-wide text-gray-400 uppercase first:mt-0">
+                      {KELOMPOK_KELAS[indexKelompok(p.kelas)]?.label ??
+                        "Kelas Lainnya"}
+                    </p>
+                  )}
+                  <div
+                    style={{ animationDelay: `${i * 40}ms` }}
+                    className="animate-pop-in group/peserta flex min-w-0 flex-col items-center gap-1 rounded-xl border border-red-100 bg-white px-2 py-2.5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-md hover:shadow-red-900/10"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-dark-primary via-primary to-rose-600 text-xs font-extrabold text-white shadow-sm transition-transform duration-300 group-hover/peserta:scale-110 group-hover/peserta:-rotate-6">
+                      {p.name.charAt(0).toUpperCase()}
+                    </span>
+                    <p className="w-full truncate text-xs font-semibold capitalize">
+                      {p.name}
+                    </p>
+                    <p className="w-full truncate text-[10px] whitespace-nowrap text-gray-500 capitalize">
+                      {p.kelas ? `${p.kelas} · ` : ""}
+                      {p.block}/{p.houseNumber}
+                    </p>
+                  </div>
+                </Fragment>
+              );
+            })}
           </div>
           {adaLebihBanyak && (
             <button
