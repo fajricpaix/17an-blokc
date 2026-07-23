@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { KategoriAntarBlok, Perwakilan } from "@/lib/types";
 import DaftarPerwakilanModal from "@/components/DaftarPerwakilanModal";
 import PerwakilanSection from "@/components/home/PerwakilanSection";
@@ -53,11 +54,20 @@ export default function TimCClient({
   return (
     <main className="mx-auto w-full sm:max-w-6xl flex-1 px-4 pb-24 sm:pb-16">
       {/* Toast Notifikasi */}
-      {notif && (
-        <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-green-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-green-800 shadow-2xl shadow-green-900/10 backdrop-blur">
-          {notif}
-        </div>
-      )}
+      <AnimatePresence>
+        {notif && (
+          <motion.div
+            key="notif"
+            initial={{ opacity: 0, y: -24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -24, scale: 0.97 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 rounded-2xl border border-green-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-green-800 shadow-2xl shadow-green-900/10 backdrop-blur"
+          >
+            {notif}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <TimCHeroSection isAdmin={isAdmin} />
 
@@ -69,17 +79,20 @@ export default function TimCClient({
 
       <SiteFooter />
 
-      {kategoriPerwakilan && (
-        <DaftarPerwakilanModal
-          kategoriList={kategoriAntarBlok}
-          kategoriAwal={kategoriPerwakilan}
-          onClose={() => setKategoriPerwakilan(null)}
-          onSuccess={() => {
-            refresh();
-            tampilkanNotif("🎉 Perwakilan berhasil didaftarkan. Merdeka!");
-          }}
-        />
-      )}
+      <AnimatePresence>
+        {kategoriPerwakilan && (
+          <DaftarPerwakilanModal
+            key="daftar-perwakilan"
+            kategoriList={kategoriAntarBlok}
+            kategoriAwal={kategoriPerwakilan}
+            onClose={() => setKategoriPerwakilan(null)}
+            onSuccess={() => {
+              refresh();
+              tampilkanNotif("🎉 Perwakilan berhasil didaftarkan. Merdeka!");
+            }}
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }

@@ -1,4 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
+
+const container = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
 
 export default function HeroSection({
   isAdmin,
@@ -39,24 +56,41 @@ export default function HeroSection({
         🚩
       </span>
 
-      <div className="relative mx-auto max-w-3xl">
-        <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-[0.2em] uppercase backdrop-blur animate-fade-up">
+      <motion.div
+        className="relative mx-auto max-w-3xl"
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.p
+          variants={item}
+          className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-[0.2em] uppercase backdrop-blur"
+        >
           <span className="inline-block origin-bottom-left animate-wave">
             🇮🇩
           </span>
           Dirgahayu Republik Indonesia
-        </p>
-        <h1 className="text-4xl font-black drop-shadow-sm sm:text-6xl animate-fade-up [animation-delay:120ms]">
+        </motion.p>
+        <motion.h1
+          variants={item}
+          className="text-4xl font-black drop-shadow-sm sm:text-6xl"
+        >
           Acara 17an Blok C
           <span className="mt-1 block bg-linear-to-r from-white via-rose-100 to-white bg-clip-text text-2xl font-extrabold text-transparent sm:text-4xl">
             Serpong Lagoon
           </span>
-        </h1>
-        <p className="mx-auto mt-5 max-w-xl text-white/90 animate-fade-up [animation-delay:240ms]">
+        </motion.h1>
+        <motion.p
+          variants={item}
+          className="mx-auto mt-5 max-w-xl text-white/90"
+        >
           Pusat informasi &amp; pendaftaran digital lomba kemerdekaan warga
           Blok C Pelican. Ayo ramaikan bersama keluarga!
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3 animate-fade-up [animation-delay:360ms]">
+        </motion.p>
+        <motion.div
+          variants={item}
+          className="mt-8 flex flex-wrap justify-center gap-3"
+        >
           <button
             onClick={onDaftarClick}
             className="rounded-full bg-white px-7 py-3.5 font-bold text-primary shadow-xl shadow-red-950/20 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-2xl active:scale-95"
@@ -71,18 +105,18 @@ export default function HeroSection({
               + Tambah Jenis Lomba
             </button>
           )}
-        </div>
+        </motion.div>
         {isAdmin && (
-          <div className="mt-5 text-sm animate-fade-up [animation-delay:480ms]">
+          <motion.div variants={item} className="mt-5 text-sm">
             <Link
               href="/admin"
               className="underline decoration-white/50 underline-offset-4 transition-colors hover:text-rose-100"
             >
               Buka Dashboard Panitia →
             </Link>
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
 
       {/* lengkung bawah */}
       <svg
