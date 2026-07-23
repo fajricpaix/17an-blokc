@@ -2,18 +2,22 @@
 
 import { useState } from "react";
 import Modal from "./Modal";
+import { Rundown } from "@/lib/types";
 
 export default function TambahRundownModal({
   onClose,
   onSuccess,
+  rundown,
 }: {
   onClose: () => void;
   onSuccess: () => void;
+  rundown?: Rundown;
 }) {
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const isEdit = Boolean(rundown);
+  const [startTime, setStartTime] = useState(rundown?.startTime ?? "");
+  const [endTime, setEndTime] = useState(rundown?.endTime ?? "");
+  const [title, setTitle] = useState(rundown?.title ?? "");
+  const [description, setDescription] = useState(rundown?.description ?? "");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,11 +26,14 @@ export default function TambahRundownModal({
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/rundowns", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ startTime, endTime, title, description }),
-      });
+      const res = await fetch(
+        isEdit ? `/api/rundowns/${rundown!.id}` : "/api/rundowns",
+        {
+          method: isEdit ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ startTime, endTime, title, description }),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Terjadi kesalahan. Coba lagi.");
@@ -42,7 +49,10 @@ export default function TambahRundownModal({
   }
 
   return (
-    <Modal title="Tambah Rundown Acara" onClose={onClose}>
+    <Modal
+      title={isEdit ? "Edit Rundown Acara" : "Tambah Rundown Acara"}
+      onClose={onClose}
+    >
       <form onSubmit={submit} className="space-y-4">
         <div className="flex gap-3">
           <div className="flex-1">
@@ -102,7 +112,11 @@ export default function TambahRundownModal({
             disabled={loading}
             className="flex-1 rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-dark-primary disabled:opacity-60"
           >
-            {loading ? "Menyimpan..." : "Simpan Rundown Baru"}
+            {loading
+              ? "Menyimpan..."
+              : isEdit
+                ? "Simpan Perubahan"
+                : "Simpan Rundown Baru"}
           </button>
           <button
             type="button"

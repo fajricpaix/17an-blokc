@@ -7,7 +7,17 @@ function formatJam(waktu: string) {
   return waktu.replace(":", ".");
 }
 
-export default function RundownTable({ rundowns }: { rundowns: Rundown[] }) {
+export default function RundownTable({
+  rundowns,
+  busyId,
+  onEdit,
+  onHapus,
+}: {
+  rundowns: Rundown[];
+  busyId: string | null;
+  onEdit: (r: Rundown) => void;
+  onHapus: (r: Rundown) => void;
+}) {
   const tableRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
 
@@ -15,10 +25,17 @@ export default function RundownTable({ rundowns }: { rundowns: Rundown[] }) {
     if (!tableRef.current) return;
     setExporting(true);
     try {
-      const { default: html2canvas } = await import("html2canvas");
-      const canvas = await html2canvas(tableRef.current, {
+      const { default: html2canvas } = await import("html2canvas-pro");
+      const el = tableRef.current;
+      const canvas = await html2canvas(el, {
         backgroundColor: "#ffffff",
         scale: 2,
+        width: el.scrollWidth,
+        height: el.scrollHeight,
+        windowWidth: el.scrollWidth,
+        onclone: (_doc, clonedEl) => {
+          clonedEl.style.overflow = "visible";
+        },
       });
       const a = document.createElement("a");
       a.href = canvas.toDataURL("image/png");
@@ -58,7 +75,12 @@ export default function RundownTable({ rundowns }: { rundowns: Rundown[] }) {
               <th className="px-4 py-3">Jam</th>
               <th className="px-4 py-3">Kegiatan</th>
               <th className="px-4 py-3">Deskripsi</th>
-              <th className="px-4 py-3">Keterangan</th>
+              <th
+                className="px-4 py-3 print:hidden"
+                data-html2canvas-ignore="true"
+              >
+                Aksi
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +108,27 @@ export default function RundownTable({ rundowns }: { rundowns: Rundown[] }) {
                   <td className="max-w-xs px-4 py-3 text-gray-600">
                     {r.description || "-"}
                   </td>
-                  <td className="px-4 py-3"></td>
+                  <td
+                    className="px-4 py-3 whitespace-nowrap print:hidden"
+                    data-html2canvas-ignore="true"
+                  >
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => onEdit(r)}
+                        disabled={busyId === r.id}
+                        className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        onClick={() => onHapus(r)}
+                        disabled={busyId === r.id}
+                        className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-dark-primary disabled:opacity-60"
+                      >
+                        {busyId === r.id ? "..." : "🗑️ Hapus"}
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))
             )}

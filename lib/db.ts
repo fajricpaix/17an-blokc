@@ -259,6 +259,21 @@ export async function addRundown(
   return { id: name, ...data };
 }
 
+export async function updateRundown(
+  id: string,
+  data: Omit<Rundown, "id">
+): Promise<boolean> {
+  const existing = await dbFetch<Omit<Rundown, "id"> | null>(
+    `rundowns/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`rundowns/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  return true;
+}
+
 export async function deleteRundown(id: string): Promise<boolean> {
   const existing = await dbFetch<Omit<Rundown, "id"> | null>(
     `rundowns/${id}`

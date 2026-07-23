@@ -61,6 +61,7 @@ export default function AdminClient({
     useState<Competition | null>(null);
   const [editKategoriAntarBlok, setEditKategoriAntarBlok] =
     useState<KategoriAntarBlok | null>(null);
+  const [editRundown, setEditRundown] = useState<Rundown | null>(null);
   const [lihatPesertaKategori, setLihatPesertaKategori] =
     useState<KategoriAntarBlok | null>(null);
   const [editPerwakilan, setEditPerwakilan] = useState<Perwakilan | null>(
@@ -186,6 +187,29 @@ export default function AdminClient({
       }
       setPerwakilans((prev) => prev.filter((x) => x.id !== p.id));
       tampilkanNotif(`🗑️ Perwakilan "${p.name}" berhasil dihapus.`);
+    } catch {
+      tampilkanNotif("⚠️ Gagal terhubung ke server.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function hapusRundown(r: Rundown) {
+    if (!confirm(`Hapus rundown "${r.title}"?`)) {
+      return;
+    }
+    setBusyId(r.id);
+    try {
+      const res = await fetch(`/api/rundowns/${r.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        tampilkanNotif(`⚠️ ${data.error ?? "Gagal menghapus rundown."}`);
+        return;
+      }
+      setRundowns((prev) => prev.filter((x) => x.id !== r.id));
+      tampilkanNotif(`🗑️ Rundown "${r.title}" berhasil dihapus.`);
     } catch {
       tampilkanNotif("⚠️ Gagal terhubung ke server.");
     } finally {
@@ -369,7 +393,12 @@ export default function AdminClient({
         onPilihSponsor={() => setShowTambahSponsor(true)}
       />
 
-      <RundownTable rundowns={rundowns} />
+      <RundownTable
+        rundowns={rundowns}
+        busyId={busyId}
+        onEdit={setEditRundown}
+        onHapus={hapusRundown}
+      />
 
       <div className="mb-4 pt-6 border-t border-primary print:hidden">
         <KategoriAntarBlokTable
@@ -427,6 +456,16 @@ export default function AdminClient({
           onSuccess={() => {
             refreshLombas();
             tampilkanNotif("✅ Perubahan lomba berhasil disimpan.");
+          }}
+        />
+      )}
+      {editRundown && (
+        <TambahRundownModal
+          rundown={editRundown}
+          onClose={() => setEditRundown(null)}
+          onSuccess={() => {
+            refreshRundowns();
+            tampilkanNotif("✅ Perubahan rundown berhasil disimpan.");
           }}
         />
       )}
