@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Modal from "./Modal";
 import { Competition, Participant, CATEGORY_LABELS } from "@/lib/types";
 
@@ -13,29 +14,45 @@ export default function PesertaLombaModal({
   onClose: () => void;
 }) {
   const pesertaLomba = pesertas.filter((p) => p.category === lomba.category);
+  const tableRef = useRef<HTMLDivElement>(null);
+  const [exporting, setExporting] = useState(false);
 
-  function downloadCSV() {
-    const header = ["No", "Nama", "Umur", "Alamat"];
-    const rows = pesertaLomba.map((p, i) => [
-      i + 1,
-      p.name,
-      `${p.age} th`,
-      `Blok ${p.block} No. ${p.houseNumber}`,
-    ]);
-    const csv = [header, ...rows]
-      .map((row) =>
-        row.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")
-      )
-      .join("\n");
-    const blob = new Blob(["﻿" + csv], {
-      type: "text/csv;charset=utf-8;",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `peserta-${lomba.name.toLowerCase().replace(/\s+/g, "-")}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  async function downloadPDF() {
+    if (!tableRef.current) return;
+    setExporting(true);
+    try {
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import("html2canvas-pro"),
+        import("jspdf"),
+      ]);
+      const el = tableRef.current;
+      const canvas = await html2canvas(el, {
+        backgroundColor: "#ffffff",
+        scale: 2,
+        width: el.scrollWidth,
+        height: el.scrollHeight,
+        windowWidth: el.scrollWidth,
+        onclone: (_doc, clonedEl) => {
+          clonedEl.style.overflow = "visible";
+        },
+      });
+      const pdf = new jsPDF({
+        orientation: canvas.width > canvas.height ? "landscape" : "portrait",
+        unit: "px",
+        format: [canvas.width, canvas.height],
+      });
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      pdf.save(`peserta-${lomba.name.toLowerCase().replace(/\s+/g, "-")}.pdf`);
+    } finally {
+      setExporting(false);
+    }
   }
 
   function cetakPDF() {
@@ -54,10 +71,11 @@ export default function PesertaLombaModal({
         </p>
         <div className="flex gap-2 print:hidden">
           <button
-            onClick={downloadCSV}
-            className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50"
+            onClick={downloadPDF}
+            disabled={exporting}
+            className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
           >
-            ⬇️ Download
+            {exporting ? "Membuat PDF..." : "⬇️ Download PDF"}
           </button>
           <button
             onClick={cetakPDF}
@@ -67,7 +85,10 @@ export default function PesertaLombaModal({
           </button>
         </div>
       </div>
-      <div className="mt-4 overflow-x-auto rounded-xl border border-red-100">
+      <div
+        ref={tableRef}
+        className="mt-4 overflow-x-auto rounded-xl border border-red-100"
+      >
         <table className="w-full min-w-120 text-left text-sm print:border-collapse">
           <thead className="bg-primary text-white">
             <tr>
