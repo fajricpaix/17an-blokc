@@ -69,7 +69,7 @@ export default function LombaSection({
 
       <Reveal>
         <h3 className="mb-4 text-lg font-bold">
-          👨‍👩‍👧 Kategori Dewasa &amp; Pasangan{" "}
+          🧑‍🤝‍🧑 Kategori Dewasa
         </h3>
       </Reveal>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

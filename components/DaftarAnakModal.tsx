@@ -64,13 +64,13 @@ export default function DaftarAnakModal({
         </div>
         <div>
           <label className="mb-1 block text-sm font-semibold">
-            Umur Anak (4 - 12 tahun) <span className="text-primary">*</span>
+            Umur Anak (3 - 17 tahun) <span className="text-primary">*</span>
           </label>
           <input
             type="number"
             required
-            min={4}
-            max={12}
+            min={3}
+            max={17}
             value={umur}
             onChange={(e) => setUmur(e.target.value)}
             placeholder="Contoh: 8"

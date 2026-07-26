@@ -26,9 +26,9 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
-  if (!Number.isInteger(age) || age < 4 || age > 12) {
+  if (!Number.isInteger(age) || age < 3 || age > 17) {
     return NextResponse.json(
-      { error: "Umur anak harus antara 4 - 12 tahun." },
+      { error: "Umur peserta harus antara 3 - 17 tahun." },
       { status: 400 }
     );
   }

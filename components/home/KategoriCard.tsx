@@ -8,9 +8,8 @@ const EMOJI_KATEGORI: Record<Category, string> = {
   "PAUD-TK": "🧸",
   "SD Kecil": "🎒",
   "SD Besar": "📚",
-  Bapak: "👨",
-  Ibu: "👩",
-  Pasangan: "👩🏻‍❤️‍👨🏻",
+  "Anak Muda": "🧑",
+  "Orang Dewasa": "🧑‍🤝‍🧑",
 };
 
 const BARIS_AWAL = 6;
