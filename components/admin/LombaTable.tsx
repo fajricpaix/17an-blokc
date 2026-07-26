@@ -1,4 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Competition, Participant, CATEGORY_LABELS } from "@/lib/types";
+import Modal from "@/components/Modal";
 import { Tab } from "./CategoryTabs";
 
 export default function LombaTable({
@@ -18,6 +23,7 @@ export default function LombaTable({
   onEdit: (l: Competition) => void;
   onHapus: (l: Competition) => void;
 }) {
+  const [detailLomba, setDetailLomba] = useState<Competition | null>(null);
   const jumlahPeserta = (l: Competition) =>
     pesertas.filter((p) => p.category === l.category).length;
 
@@ -74,7 +80,20 @@ export default function LombaTable({
                     </button>
                   </td>
                   <td className="max-w-xs px-4 py-3 text-gray-600">
-                    {l.description || "-"}
+                    {l.description ? (
+                      <>
+                        <p className="line-clamp-2">{l.description}</p>
+                        <button
+                          type="button"
+                          onClick={() => setDetailLomba(l)}
+                          className="mt-0.5 text-xs font-bold text-primary hover:underline"
+                        >
+                          Lihat detail
+                        </button>
+                      </>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex gap-2">
@@ -100,6 +119,20 @@ export default function LombaTable({
           </tbody>
         </table>
       </div>
+
+      <AnimatePresence>
+        {detailLomba && (
+          <Modal
+            key="detail-lomba"
+            title={`🚩 ${detailLomba.name}`}
+            onClose={() => setDetailLomba(null)}
+          >
+            <p className="leading-relaxed whitespace-pre-line text-gray-600">
+              {detailLomba.description}
+            </p>
+          </Modal>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

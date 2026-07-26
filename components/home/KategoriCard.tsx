@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Competition, Participant, Category, CATEGORY_LABELS } from "@/lib/types";
 import CountUp from "@/components/CountUp";
+import Modal from "@/components/Modal";
 
 const EMOJI_KATEGORI: Record<Category, string> = {
   "PAUD-TK": "🧸",
@@ -24,6 +26,7 @@ export default function KategoriCard({
   pesertas?: Participant[];
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [detailLomba, setDetailLomba] = useState<Competition | null>(null);
   const adaLebihBanyak = (pesertas?.length ?? 0) > BARIS_AWAL;
   const pesertaTampil = expanded ? pesertas : pesertas?.slice(0, BARIS_AWAL);
 
@@ -43,9 +46,18 @@ export default function KategoriCard({
             <li key={l.id}>
               <p className="font-semibold capitalize">🚩 {l.name}</p>
               {l.description && (
-                <p className="mt-0.5 leading-relaxed text-gray-600">
-                  {l.description}
-                </p>
+                <>
+                  <p className="mt-0.5 line-clamp-2 leading-relaxed text-gray-600">
+                    {l.description}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setDetailLomba(l)}
+                    className="mt-0.5 text-xs font-bold text-primary hover:underline"
+                  >
+                    Lihat detail
+                  </button>
+                </>
               )}
             </li>
           ))}
@@ -116,6 +128,20 @@ export default function KategoriCard({
           </div>
         </div>
       )}
+
+      <AnimatePresence>
+        {detailLomba && (
+          <Modal
+            key="detail-lomba"
+            title={`🚩 ${detailLomba.name}`}
+            onClose={() => setDetailLomba(null)}
+          >
+            <p className="leading-relaxed whitespace-pre-line text-gray-600">
+              {detailLomba.description}
+            </p>
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
