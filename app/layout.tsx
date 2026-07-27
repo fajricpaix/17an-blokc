@@ -31,14 +31,21 @@ export const metadata: Metadata = {
     title: "Acara 17an Blok C Serpong Lagoon",
     description:
       "Website pendaftaran digital lomba 17 Agustus warga Blok C Pelican, Serpong Lagoon.",
-    images: ["/logo.webp"],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 640,
+        height: 641,
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Acara 17an Blok C Serpong Lagoon",
     description:
       "Website pendaftaran digital lomba 17 Agustus warga Blok C Pelican, Serpong Lagoon.",
-    images: ["/logo.webp"],
+    images: ["/og-image.png"],
   },
 };
 
