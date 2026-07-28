@@ -6,6 +6,7 @@ import { Competition, Participant, Rundown } from "@/lib/types";
 import DaftarAnakModal from "@/components/DaftarAnakModal";
 import TambahLombaModal from "@/components/TambahLombaModal";
 import HeroSection from "./HeroSection";
+import BannerAcaraSection from "./BannerAcaraSection";
 import RundownSection from "./RundownSection";
 import LombaSection from "./LombaSection";
 import SiteFooter from "./SiteFooter";
@@ -79,6 +80,8 @@ export default function HomeClient({
         onDaftarClick={() => setShowDaftar(true)}
         onTambahLombaClick={() => setShowTambahLomba(true)}
       />
+
+      <BannerAcaraSection />
 
       <RundownSection rundowns={rundowns} />
 
