@@ -105,6 +105,7 @@ export type KategoriPengeluaran =
   | "Hadiah"
   | "Konsumsi 17an"
   | "Acara & Perlengkapan"
+  | "Perlengkapan Lomba dan Perform"
   | "Panitia & Registrasi"
   | "Tenaga Lapangan";
 
@@ -112,6 +113,7 @@ export const KATEGORI_PENGELUARAN: KategoriPengeluaran[] = [
   "Hadiah",
   "Konsumsi 17an",
   "Acara & Perlengkapan",
+  "Perlengkapan Lomba dan Perform",
   "Panitia & Registrasi",
   "Tenaga Lapangan",
 ];
