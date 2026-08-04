@@ -15,8 +15,8 @@ export default function DonasiTable({
   const totalDonasi = entries.reduce((sum, e) => sum + e.jumlah, 0);
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-red-100 bg-white shadow-sm">
-      <table className="w-full min-w-120 text-left text-sm">
+    <div className="overflow-x-auto rounded-xl border border-red-100 bg-white shadow-sm print:overflow-visible">
+      <table className="w-full min-w-120 text-left text-sm print:min-w-0">
         <thead className="bg-primary text-white">
           <tr>
             <th className="px-4 py-3">No</th>

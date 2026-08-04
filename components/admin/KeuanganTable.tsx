@@ -84,13 +84,22 @@ export default function KeuanganTable({
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => onTambah(subTab)}
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-dark-primary"
-        >
-          + Tambah {subTab === "Donasi" ? "Donasi" : "Pengeluaran"}
-        </button>
+        <div className="flex w-full gap-2 sm:w-auto">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-bold text-dark-primary shadow-sm transition-colors hover:bg-red-50"
+          >
+            🖨️ Cetak
+          </button>
+          <button
+            type="button"
+            onClick={() => onTambah(subTab)}
+            className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-dark-primary sm:flex-none"
+          >
+            + Tambah {subTab === "Donasi" ? "Donasi" : "Pengeluaran"}
+          </button>
+        </div>
       </div>
 
       {subTab === "Donasi" ? (
