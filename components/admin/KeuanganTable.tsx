@@ -68,13 +68,13 @@ export default function KeuanganTable({
       </div>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <div className="flex gap-2 rounded-full border border-red-100 bg-white p-1.5 shadow-sm">
+        <div className="w-full sm:w-auto flex gap-2 rounded-full border border-red-100 bg-white p-1.5 shadow-sm">
           {(["Donasi", "Pengeluaran"] as JenisKeuangan[]).map((t) => (
             <button
               key={t}
               type="button"
               onClick={() => setSubTab(t)}
-              className={`rounded-full px-4 py-2 text-sm font-bold transition-colors duration-200 ${
+              className={`w-full sm:w-auto rounded-full px-4 py-2 text-sm font-bold transition-colors duration-200 ${
                 subTab === t
                   ? "bg-primary text-white shadow-sm"
                   : "text-dark-primary hover:bg-red-50"
