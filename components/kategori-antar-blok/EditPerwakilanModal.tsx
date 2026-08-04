@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "./Modal";
+import Modal from "@/components/Modal";
 import {
   KATEGORI_ANTAR_BLOK_BUTUH_KELAS,
   KategoriAntarBlok,

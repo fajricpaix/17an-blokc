@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Modal from "./Modal";
+import Modal from "@/components/Modal";
 import { Competition, Participant, CATEGORY_LABELS } from "@/lib/types";
 
 export default function PesertaLombaModal({

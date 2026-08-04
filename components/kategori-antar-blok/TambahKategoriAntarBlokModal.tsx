@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "./Modal";
+import Modal from "@/components/Modal";
 import { KategoriAntarBlok } from "@/lib/types";
 
 export default function TambahKategoriAntarBlokModal({

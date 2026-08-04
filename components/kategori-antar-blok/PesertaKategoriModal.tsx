@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "./Modal";
+import Modal from "@/components/Modal";
 import { KategoriAntarBlok, Perwakilan } from "@/lib/types";
 
 export default function PesertaKategoriModal({

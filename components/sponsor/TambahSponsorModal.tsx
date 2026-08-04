@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "./Modal";
+import Modal from "@/components/Modal";
 
 const MAX_LOGO_SIZE = 200 * 1024; // 200 KB
 
