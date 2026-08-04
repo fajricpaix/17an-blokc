@@ -90,7 +90,7 @@ export default function KeuanganTable({
             onClick={() => window.print()}
             className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-bold text-dark-primary shadow-sm transition-colors hover:bg-red-50"
           >
-            🖨️ Cetak
+            🖨️ Cetak PDF
           </button>
           <button
             type="button"
