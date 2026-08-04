@@ -1,5 +1,5 @@
 import { getKeuangan } from "@/lib/db";
-import KeuanganClient from "@/components/admin/KeuanganClient";
+import KeuanganClient from "@/components/keuangan/KeuanganClient";
 
 export const dynamic = "force-dynamic";
 

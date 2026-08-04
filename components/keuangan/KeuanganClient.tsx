@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import TambahKeuanganModal from "@/components/TambahKeuanganModal";
+import TambahKeuanganModal from "./TambahKeuanganModal";
 import { JenisKeuangan, KeuanganEntry } from "@/lib/types";
 import KeuanganTable from "./KeuanganTable";
 
