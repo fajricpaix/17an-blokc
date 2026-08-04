@@ -50,7 +50,7 @@ export default function TambahFab({
   return (
     <div
       ref={rootRef}
-      className="fixed right-6 bottom-6 z-40 flex flex-col items-end gap-3 print:hidden"
+      className="fixed right-6 bottom-20 z-40 flex flex-col items-end gap-3 sm:bottom-6 print:hidden"
     >
       {open &&
         ACTIONS.map((a, i) => (

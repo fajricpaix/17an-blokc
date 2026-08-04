@@ -97,3 +97,45 @@ export interface Sponsor {
   // Undefined (sponsor lama) diperlakukan sebagai aktif.
   active?: boolean;
 }
+
+export type JenisKeuangan = "Donasi" | "Pengeluaran";
+
+// Pos pengeluaran acara 17an, dipilih saat mencatat transaksi jenis Pengeluaran.
+export type KategoriPengeluaran =
+  | "Hadiah"
+  | "Konsumsi 17an"
+  | "Acara & Perlengkapan"
+  | "Panitia & Registrasi"
+  | "Tenaga Lapangan";
+
+export const KATEGORI_PENGELUARAN: KategoriPengeluaran[] = [
+  "Hadiah",
+  "Konsumsi 17an",
+  "Acara & Perlengkapan",
+  "Panitia & Registrasi",
+  "Tenaga Lapangan",
+];
+
+// Sesi konsumsi, dipilih saat kategoriPengeluaran == "Konsumsi 17an".
+export type WaktuKonsumsi = "Sore" | "Malam";
+
+export const WAKTU_KONSUMSI: WaktuKonsumsi[] = ["Sore", "Malam"];
+
+export interface KeuanganEntry {
+  id: string;
+  // Tanggal transaksi, format ISO "YYYY-MM-DD".
+  tanggal: string;
+  keterangan: string;
+  jenis: JenisKeuangan;
+  jumlah: number;
+  createdAt: string;
+  // Wajib diisi untuk jenis "Donasi": alamat rumah donatur, mis. "Blok C No. 12".
+  alamatRumah?: string;
+  // Wajib diisi untuk jenis "Pengeluaran": pos pengeluarannya.
+  kategoriPengeluaran?: KategoriPengeluaran;
+  // Wajib diisi untuk jenis "Pengeluaran": rincian satuan, jumlah = jumlahSatuan * hargaSatuan.
+  jumlahSatuan?: number;
+  hargaSatuan?: number;
+  // Wajib diisi untuk kategoriPengeluaran == "Konsumsi 17an": sesi konsumsinya.
+  waktuKonsumsi?: WaktuKonsumsi;
+}

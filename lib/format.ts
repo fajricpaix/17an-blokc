@@ -16,3 +16,11 @@ export function rentangTanggalKategori(k: KategoriAntarBlok) {
   }
   return `${formatTanggal(k.tanggalMulai)} - ${formatTanggal(k.tanggalSelesai)}`;
 }
+
+export function formatRupiah(jumlah: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(jumlah);
+}

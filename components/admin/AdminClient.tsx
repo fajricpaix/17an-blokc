@@ -19,7 +19,6 @@ import {
   Sponsor,
 } from "@/lib/types";
 import { useState } from "react";
-import AdminHeader from "./AdminHeader";
 import { Tab } from "./CategoryTabs";
 import KategoriAntarBlokTable from "./KategoriAntarBlokTable";
 import LombaTable from "./LombaTable";
@@ -377,9 +376,7 @@ export default function AdminClient({
   );
 
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-16">
-      <AdminHeader />
-
+    <>
       {notif && (
         <div className="fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 animate-slide-down rounded-2xl border border-red-200 bg-white/95 px-5 py-3.5 text-center font-semibold text-dark-primary shadow-2xl shadow-red-900/10 backdrop-blur print:hidden">
           {notif}
@@ -525,6 +522,6 @@ export default function AdminClient({
           }}
         />
       )}
-    </main>
+    </>
   );
 }
