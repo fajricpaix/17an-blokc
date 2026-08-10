@@ -27,8 +27,11 @@ export default function HomeClient({
   const [showDaftar, setShowDaftar] = useState(false);
   const [showTambahLomba, setShowTambahLomba] = useState(false);
   const [notif, setNotif] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refresh = useCallback(async () => {
+    setIsRefreshing(true);
+    const jedaMinimum = new Promise((resolve) => setTimeout(resolve, 600));
     try {
       const [lRes, pRes, rRes] = await Promise.all([
         fetch("/api/competitions"),
@@ -40,6 +43,9 @@ export default function HomeClient({
       if (rRes.ok) setRundowns(await rRes.json());
     } catch {
       // biarkan data lama tampil jika refresh gagal
+    } finally {
+      await jedaMinimum;
+      setIsRefreshing(false);
     }
   }, []);
 
@@ -59,6 +65,23 @@ export default function HomeClient({
 
   return (
     <main className="mx-auto w-full sm:max-w-6xl flex-1 px-4 pb-24 sm:pb-16">
+      {/* Indikator sinkronisasi data latar belakang */}
+      <AnimatePresence>
+        {isRefreshing && (
+          <motion.div
+            key="sync"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="fixed top-4 right-4 z-50 flex items-center gap-1.5 rounded-full border border-red-100 bg-white/95 px-3 py-1.5 text-xs font-semibold text-gray-500 shadow-md backdrop-blur"
+          >
+            <span className="size-1.5 animate-pulse rounded-full bg-primary" />
+            Memperbarui data...
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Toast Notifikasi */}
       <AnimatePresence>
         {notif && (

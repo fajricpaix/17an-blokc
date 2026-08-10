@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Countdown from "@/components/Countdown";
 
 const container = {
   hidden: {},
@@ -87,6 +88,9 @@ export default function HeroSection({
           Pusat informasi &amp; pendaftaran digital lomba kemerdekaan warga
           Blok C Pelican. Ayo ramaikan bersama keluarga!
         </motion.p>
+        <motion.div variants={item}>
+          <Countdown />
+        </motion.div>
         <motion.div
           variants={item}
           className="mt-8 flex flex-wrap justify-center gap-3"

@@ -26,18 +26,43 @@ export default function SiteFooter() {
             <p className="mb-3 text-xs font-bold tracking-wide text-transparent uppercase bg-linear-to-r from-dark-primary via-primary to-rose-600 bg-clip-text">
               Sponsor 17an Pelican C
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {sponsors.map((s) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={s.id}
-                  src={s.logoUrl}
-                  alt={s.name}
-                  title={s.name}
-                  className="size-12 rounded-lg border border-red-100 bg-white object-contain p-1 shadow-sm"
+            {sponsors.length > 5 ? (
+              <div className="group relative overflow-hidden">
+                <div className="flex w-max animate-marquee gap-3 group-hover:[animation-play-state:paused]">
+                  {[...sponsors, ...sponsors].map((s, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={`${s.id}-${i}`}
+                      src={s.logoUrl}
+                      alt={s.name}
+                      title={s.name}
+                      className="size-12 shrink-0 rounded-lg border border-red-100 bg-white object-contain p-1 shadow-sm"
+                    />
+                  ))}
+                </div>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-linear-to-r from-secondary to-transparent"
                 />
-              ))}
-            </div>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-secondary to-transparent"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {sponsors.map((s) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={s.id}
+                    src={s.logoUrl}
+                    alt={s.name}
+                    title={s.name}
+                    className="size-12 rounded-lg border border-red-100 bg-white object-contain p-1 shadow-sm"
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
         <span className="mb-2 block text-2xl">🇮🇩</span>

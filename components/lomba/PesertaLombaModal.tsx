@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import Modal from "@/components/Modal";
 import { Competition, Participant, CATEGORY_LABELS } from "@/lib/types";
 
+const BARIS_ON_THE_SPOT = 10;
+
 export default function PesertaLombaModal({
   lomba,
   pesertas,
@@ -16,10 +18,21 @@ export default function PesertaLombaModal({
   const pesertaLomba = pesertas.filter((p) => p.category === lomba.category);
   const tableRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
+  const [revealForExport, setRevealForExport] = useState(false);
+
+  function tungguFrame() {
+    return new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    );
+  }
 
   async function downloadPDF() {
     if (!tableRef.current) return;
     setExporting(true);
+    // tampilkan dulu baris on-the-spot di DOM asli, biar tinggi tabel
+    // yang diukur html2canvas sudah menghitung baris tambahan itu
+    setRevealForExport(true);
+    await tungguFrame();
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
         import("html2canvas-pro"),
@@ -51,6 +64,7 @@ export default function PesertaLombaModal({
       );
       pdf.save(`peserta-${lomba.name.toLowerCase().replace(/\s+/g, "-")}.pdf`);
     } finally {
+      setRevealForExport(false);
       setExporting(false);
     }
   }
@@ -145,6 +159,42 @@ export default function PesertaLombaModal({
                 </tr>
               ))
             )}
+            <tr
+              className={
+                revealForExport ? "table-row" : "hidden print:table-row"
+              }
+            >
+              <td
+                colSpan={4}
+                className="bg-red-50 px-4 py-2 text-xs font-bold text-dark-primary print:border print:border-gray-400"
+              >
+                ✍️ Pendaftaran On The Spot
+              </td>
+            </tr>
+            {Array.from({ length: BARIS_ON_THE_SPOT }).map((_, i) => (
+              <tr
+                key={`ots-${i}`}
+                className={`${
+                  revealForExport ? "table-row" : "hidden print:table-row"
+                } ${(pesertaLomba.length + i) % 2 ? "bg-red-50/40" : "bg-white"}`}
+              >
+                <td className="px-4 py-3 text-gray-500 print:border print:border-gray-400">
+                  {pesertaLomba.length + i + 1}
+                </td>
+                <td className="px-4 py-3 print:border print:border-gray-400">
+                  &nbsp;
+                </td>
+                <td className="px-4 py-3 print:border print:border-gray-400">
+                  &nbsp;
+                </td>
+                <td className="px-4 py-3 print:border print:border-gray-400">
+                  &nbsp;
+                </td>
+                <td className="hidden px-4 py-3 print:table-cell print:border print:border-gray-400">
+                  &nbsp;
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

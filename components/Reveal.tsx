@@ -13,6 +13,7 @@ export default function Reveal({
 }) {
   return (
     <motion.div
+      layout="position"
       className={className}
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}

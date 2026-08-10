@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 
 const SIZE_CLASS = {
@@ -20,7 +21,7 @@ export default function Modal({
   footer?: React.ReactNode;
   size?: keyof typeof SIZE_CLASS;
 }) {
-  return (
+  return createPortal(
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm print:static print:block print:bg-transparent print:p-0 print:backdrop-blur-none"
       onClick={onClose}
@@ -56,6 +57,7 @@ export default function Modal({
           </div>
         )}
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

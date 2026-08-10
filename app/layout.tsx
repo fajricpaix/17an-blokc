@@ -15,10 +15,13 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Fallback ke domain production (bukan localhost) supaya preview link di
+// WhatsApp/grup RT tetap tampil kalau NEXT_PUBLIC_SITE_URL lupa di-set di Vercel.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://17an-blokc.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: "Acara 17an Blok C Serpong Lagoon",
   description:
     "Website pendaftaran digital lomba 17 Agustus warga Blok C Pelican, Serpong Lagoon.",
