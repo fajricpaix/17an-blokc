@@ -2,17 +2,51 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import {
+  Baby,
+  Backpack,
+  BookOpen,
+  ChevronDown,
+  ClipboardList,
+  Flag,
+  User,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { Competition, Participant, Category, CATEGORY_LABELS } from "@/lib/types";
 import CountUp from "@/components/CountUp";
 import Modal from "@/components/Modal";
 
-const EMOJI_KATEGORI: Record<Category, string> = {
-  "PAUD-TK": "🧸",
-  "SD Kecil": "🎒",
-  "SD Besar": "📚",
-  "Anak Muda": "🧑",
-  "Orang Dewasa": "🧑‍🤝‍🧑",
+const KATEGORI_ICON: Record<Category, LucideIcon> = {
+  "PAUD-TK": Baby,
+  "SD Kecil": Backpack,
+  "SD Besar": BookOpen,
+  "Anak Muda": User,
+  "Orang Dewasa": Users,
 };
+
+// Palette avatar peserta — warna dipilih dari hash nama, bukan selalu merah,
+// biar grid peserta gampang dibedain sekilas.
+const AVATAR_PALETTE = [
+  "from-red-500 to-rose-600",
+  "from-orange-400 to-amber-600",
+  "from-amber-400 to-yellow-600",
+  "from-lime-400 to-green-600",
+  "from-emerald-400 to-teal-600",
+  "from-cyan-400 to-sky-600",
+  "from-blue-400 to-indigo-600",
+  "from-violet-400 to-purple-600",
+  "from-fuchsia-400 to-pink-600",
+  "from-pink-400 to-rose-600",
+];
+
+function warnaAvatar(nama: string) {
+  let hash = 0;
+  for (let i = 0; i < nama.length; i++) {
+    hash = (hash * 31 + nama.charCodeAt(i)) >>> 0;
+  }
+  return AVATAR_PALETTE[hash % AVATAR_PALETTE.length];
+}
 
 const BARIS_AWAL = 6;
 
@@ -29,12 +63,13 @@ export default function KategoriCard({
   const [showSemuaPeserta, setShowSemuaPeserta] = useState(false);
   const adaLebihBanyak = (pesertas?.length ?? 0) > BARIS_AWAL;
   const pesertaTampil = pesertas?.slice(0, BARIS_AWAL);
+  const IkonKategori = KATEGORI_ICON[kategori];
 
   return (
     <div className="group flex h-full flex-col rounded-2xl border border-red-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-red-200 hover:shadow-xl hover:shadow-red-900/5">
-      <h4 className="mb-3 flex items-center gap-2 border-b border-red-100 pb-2.5 font-bold text-dark-primary capitalize">
-        <span className="inline-block text-xl transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-6">
-          {EMOJI_KATEGORI[kategori]}
+      <h4 className="mb-3 flex items-center gap-2.5 border-b border-red-100 pb-2.5 font-bold text-dark-primary capitalize">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-red-50 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+          <IkonKategori className="size-4.5" strokeWidth={2.4} />
         </span>
         {CATEGORY_LABELS[kategori]}
       </h4>
@@ -44,10 +79,16 @@ export default function KategoriCard({
         <ul className="space-y-3.5 text-sm">
           {lombas.map((l) => (
             <li key={l.id}>
-              <p className="font-semibold capitalize">🚩 {l.name}</p>
+              <p className="flex items-center gap-1.5 font-semibold capitalize">
+                <Flag
+                  className="size-3.5 shrink-0 text-primary"
+                  strokeWidth={2.5}
+                />
+                {l.name}
+              </p>
               {l.description && (
                 <>
-                  <p className="mt-0.5 line-clamp-2 leading-relaxed text-gray-600">
+                  <p className="mt-0.5 line-clamp-1 leading-relaxed text-gray-600">
                     {l.description}
                   </p>
                   <button
@@ -69,7 +110,10 @@ export default function KategoriCard({
         <div className="mt-auto pt-4">
           <div className="border-t border-red-100 pt-3">
             <h5 className="mb-2 flex items-center justify-between gap-2 text-sm font-bold text-dark-primary">
-              <span>📝 Peserta Terdaftar</span>
+              <span className="flex items-center gap-1.5">
+                <ClipboardList className="size-4" strokeWidth={2.4} />
+                Peserta Terdaftar
+              </span>
               <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs text-primary">
                 <CountUp value={pesertas.length} />
               </span>
@@ -92,17 +136,7 @@ export default function KategoriCard({
                     className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-lg border border-red-100 py-1.5 text-xs font-bold text-dark-primary transition-colors duration-200 hover:bg-red-50"
                   >
                     {`Lihat Semua (${pesertas.length})`}
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="size-3.5 shrink-0"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <ChevronDown className="size-3.5 shrink-0" strokeWidth={2.5} />
                   </button>
                 )}
               </>
@@ -157,7 +191,11 @@ function PesertaCard({
       style={{ animationDelay: `${delay}ms` }}
       className="animate-pop-in group/peserta flex min-w-0 flex-col items-center gap-1 rounded-xl border border-red-100 bg-white px-2 py-2.5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-md hover:shadow-red-900/10"
     >
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-dark-primary via-primary to-rose-600 text-xs font-extrabold text-white shadow-sm transition-transform duration-300 group-hover/peserta:scale-110 group-hover/peserta:-rotate-6">
+      <span
+        className={`flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br text-xs font-extrabold text-white shadow-sm transition-transform duration-300 group-hover/peserta:scale-110 group-hover/peserta:-rotate-6 ${warnaAvatar(
+          peserta.name
+        )}`}
+      >
         {peserta.name.charAt(0).toUpperCase()}
       </span>
       <p className="w-full truncate text-xs font-semibold capitalize">
