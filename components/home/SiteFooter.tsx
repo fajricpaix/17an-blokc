@@ -28,7 +28,7 @@ export default function SiteFooter() {
             </p>
             {sponsors.length > 5 ? (
               <div className="group relative overflow-hidden">
-                <div className="flex w-max animate-marquee gap-3 group-hover:[animation-play-state:paused]">
+                <div className="flex w-max animate-marquee gap-4 group-hover:[animation-play-state:paused]">
                   {[...sponsors, ...sponsors].map((s, i) => (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -36,7 +36,7 @@ export default function SiteFooter() {
                       src={s.logoUrl}
                       alt={s.name}
                       title={s.name}
-                      className="size-12 shrink-0 rounded-lg border border-red-100 bg-white object-contain p-1 shadow-sm"
+                      className="w-20 h-auto shrink-0 rounded-lg border border-red-100 bg-white object-contain shadow-sm"
                     />
                   ))}
                 </div>
@@ -50,7 +50,7 @@ export default function SiteFooter() {
                 />
               </div>
             ) : (
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-4">
                 {sponsors.map((s) => (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -58,7 +58,7 @@ export default function SiteFooter() {
                     src={s.logoUrl}
                     alt={s.name}
                     title={s.name}
-                    className="size-12 rounded-lg border border-red-100 bg-white object-contain p-1 shadow-sm"
+                    className="w-20 h-auto rounded-lg border border-red-100 bg-white object-contain shadow-sm"
                   />
                 ))}
               </div>
