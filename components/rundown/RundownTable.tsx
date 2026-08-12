@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Rundown } from "@/lib/types";
+import { useEffect, useRef, useState } from "react";
+import { Rundown, Sponsor } from "@/lib/types";
 
 function formatJam(waktu: string) {
   return waktu.replace(":", ".");
@@ -20,14 +20,52 @@ export default function RundownTable({
 }) {
   const tableRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
+  const [previewGambar, setPreviewGambar] = useState(false);
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+
+  useEffect(() => {
+    fetch("/api/sponsors")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list: Sponsor[]) =>
+        setSponsors(list.filter((s) => s.active !== false))
+      )
+      .catch(() => {
+        // biarkan tanpa sponsor kalau gagal dimuat
+      });
+  }, []);
+
+  function tungguFrame() {
+    return new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    );
+  }
+
+  function tungguGambarSponsor(el: HTMLElement) {
+    const imgs = Array.from(el.querySelectorAll("img"));
+    return Promise.all(
+      imgs.map((img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              img.onload = () => resolve();
+              img.onerror = () => resolve();
+            })
+      )
+    );
+  }
 
   async function jadikanGambar() {
     if (!tableRef.current) return;
     setExporting(true);
+    // Tampilkan header & sponsor di DOM asli sebentar supaya ukurannya
+    // ikut terhitung sebelum di-capture, baru disembunyikan lagi.
+    setPreviewGambar(true);
     try {
       const { default: html2canvas } = await import("html2canvas-pro");
       const el = tableRef.current;
-      const canvas = await html2canvas(el, {
+      await tungguFrame();
+      await tungguGambarSponsor(el);
+      const contentCanvas = await html2canvas(el, {
         backgroundColor: "#ffffff",
         scale: 2,
         width: el.scrollWidth,
@@ -37,11 +75,29 @@ export default function RundownTable({
           clonedEl.style.overflow = "visible";
         },
       });
+
+      // Susun ulang jadi kanvas persegi (1:1) dengan konten di tengah.
+      const sisi = Math.max(contentCanvas.width, contentCanvas.height);
+      const squareCanvas = document.createElement("canvas");
+      squareCanvas.width = sisi;
+      squareCanvas.height = sisi;
+      const ctx = squareCanvas.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, sisi, sisi);
+        ctx.drawImage(
+          contentCanvas,
+          (sisi - contentCanvas.width) / 2,
+          (sisi - contentCanvas.height) / 2
+        );
+      }
+
       const a = document.createElement("a");
-      a.href = canvas.toDataURL("image/png");
+      a.href = (ctx ? squareCanvas : contentCanvas).toDataURL("image/png");
       a.download = "rundown-acara-blok-c.png";
       a.click();
     } finally {
+      setPreviewGambar(false);
       setExporting(false);
     }
   }
@@ -69,6 +125,16 @@ export default function RundownTable({
         ref={tableRef}
         className="overflow-x-auto rounded-xl border border-red-100 bg-white shadow-sm"
       >
+        <div
+          data-image-only
+          className={`bg-white px-4 pt-6 pb-4 text-center ${
+            previewGambar ? "" : "hidden"
+          }`}
+        >
+          <h1 className="text-2xl font-extrabold text-dark-primary">
+            🇮🇩 Rundown Acara 17an Pelican Blok C
+          </h1>
+        </div>
         <table className="w-full min-w-160 text-left text-sm">
           <thead className="bg-primary text-white">
             <tr>
@@ -134,6 +200,30 @@ export default function RundownTable({
             )}
           </tbody>
         </table>
+        {sponsors.length > 0 && (
+          <div
+            data-image-only
+            className={`border-t border-red-100 bg-white px-4 py-5 text-center ${
+              previewGambar ? "" : "hidden"
+            }`}
+          >
+            <p className="mb-3 text-xs font-bold tracking-wide text-dark-primary uppercase">
+              Didukung oleh
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              {sponsors.map((s) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={s.id}
+                  src={s.logoUrl}
+                  alt={s.name}
+                  title={s.name}
+                  className="h-auto w-20 rounded-lg border border-red-100 bg-white object-contain shadow-sm"
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
