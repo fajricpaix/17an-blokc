@@ -25,8 +25,8 @@ function BarisPengeluaran({
         zebra ? "bg-red-50/40" : "bg-white"
       }`}
     >
-      <td className="px-4 py-3">{no}</td>
-      <td className="px-4 py-3 font-semibold">{entry.keterangan}</td>
+      <td className="px-4 py-3">{no}.</td>
+      <td className="px-4 py-3 font-semibold capitalize">{entry.keterangan}</td>
       <td className="px-4 py-3 whitespace-nowrap">
         {entry.jumlahSatuan?.toLocaleString("id-ID") ?? "-"}
       </td>
