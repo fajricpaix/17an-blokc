@@ -8,6 +8,7 @@ export default function KategoriAntarBlokTable({
   onLihatPeserta,
   onEdit,
   onToggleLock,
+  onToggleActive,
   onHapus,
 }: {
   kategoriList: KategoriAntarBlok[];
@@ -16,6 +17,7 @@ export default function KategoriAntarBlokTable({
   onLihatPeserta: (k: KategoriAntarBlok) => void;
   onEdit: (k: KategoriAntarBlok) => void;
   onToggleLock: (k: KategoriAntarBlok) => void;
+  onToggleActive: (k: KategoriAntarBlok) => void;
   onHapus: (k: KategoriAntarBlok) => void;
 }) {
   const jumlahPerwakilan = (k: KategoriAntarBlok) =>
@@ -39,7 +41,8 @@ export default function KategoriAntarBlokTable({
               <th className="px-4 py-3">Nama Lomba</th>
               <th className="px-4 py-3">Tanggal</th>
               <th className="px-4 py-3">Jumlah Perwakilan</th>
-              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Pendaftaran</th>
+              <th className="px-4 py-3">Tampil</th>
               <th className="px-4 py-3">Aksi</th>
             </tr>
           </thead>
@@ -47,7 +50,7 @@ export default function KategoriAntarBlokTable({
             {kategoriList.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="px-4 py-8 text-center text-gray-400 italic"
                 >
                   Belum ada kategori lomba antar blok.
@@ -86,6 +89,17 @@ export default function KategoriAntarBlokTable({
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
+                    {k.active === false ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-gray-200 px-2.5 py-0.5 text-xs font-bold text-gray-600">
+                        ⚪ Nonaktif
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700">
+                        🟢 Aktif
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex gap-2">
                       <button
                         onClick={() => onEdit(k)}
@@ -100,6 +114,13 @@ export default function KategoriAntarBlokTable({
                         className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
                       >
                         {k.locked ? "🔓 Buka" : "🔒 Kunci"}
+                      </button>
+                      <button
+                        onClick={() => onToggleActive(k)}
+                        disabled={busyId === k.id}
+                        className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
+                      >
+                        {k.active === false ? "🟢 Aktifkan" : "⚪ Nonaktifkan"}
                       </button>
                       <button
                         onClick={() => onHapus(k)}

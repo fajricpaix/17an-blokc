@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import BottomNav from "@/components/BottomNav";
 import TwibbonLauncher from "@/components/TwibbonLauncher";
+import KritikSaranLauncher from "@/components/KritikSaranLauncher";
 import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
@@ -63,7 +64,8 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <BottomNav />
-        <TwibbonLauncher />
+        {/* <TwibbonLauncher /> */}
+        <KritikSaranLauncher />
         <Analytics />
       </body>
     </html>

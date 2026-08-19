@@ -22,6 +22,9 @@ export interface Competition {
   name: string;
   category: Category;
   description: string;
+  // Kalau false, lomba disembunyikan dari halaman publik. Undefined
+  // (lomba lama) diperlakukan sebagai aktif.
+  active?: boolean;
 }
 
 export interface Participant {
@@ -70,6 +73,9 @@ export interface KategoriAntarBlok {
   tanggalSelesai?: string;
   // Kalau true, peserta baru tidak bisa lagi ditambahkan ke cabor ini.
   locked?: boolean;
+  // Kalau false, cabor disembunyikan dari halaman publik (tim-c). Undefined
+  // (cabor lama) diperlakukan sebagai aktif.
+  active?: boolean;
 }
 
 // Nama kategori yang butuh input kelas peserta saat pendaftaran perwakilan.
@@ -122,6 +128,14 @@ export const KATEGORI_PENGELUARAN: KategoriPengeluaran[] = [
 export type WaktuKonsumsi = "Sore" | "Malam";
 
 export const WAKTU_KONSUMSI: WaktuKonsumsi[] = ["Sore", "Malam"];
+
+export interface KritikSaran {
+  id: string;
+  pesan: string;
+  createdAt: string;
+  // Ditandai admin setelah ditindaklanjuti. Undefined = belum dibaca.
+  dibaca?: boolean;
+}
 
 export interface KeuanganEntry {
   id: string;

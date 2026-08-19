@@ -68,6 +68,35 @@ const LombaSection = forwardRef<
     }
   }
 
+  async function toggleActiveLomba(l: Competition) {
+    const akanAktif = l.active === false;
+    setBusyId(l.id);
+    try {
+      const res = await fetch(`/api/competitions/${l.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: akanAktif }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        tampilkanNotif(`⚠️ ${data.error ?? "Gagal mengubah status."}`);
+        return;
+      }
+      setLombas((prev) =>
+        prev.map((x) => (x.id === l.id ? { ...x, active: akanAktif } : x))
+      );
+      tampilkanNotif(
+        akanAktif
+          ? `🟢 Lomba "${l.name}" berhasil diaktifkan.`
+          : `⚪ Lomba "${l.name}" berhasil dinonaktifkan.`
+      );
+    } catch {
+      tampilkanNotif("⚠️ Gagal terhubung ke server.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   const lombaTampil =
     tab === "Semua" ? lombas : lombas.filter((l) => l.category === tab);
 
@@ -80,6 +109,7 @@ const LombaSection = forwardRef<
         busyId={busyId}
         onLihatPeserta={setLihatPesertaLomba}
         onEdit={setEditLomba}
+        onToggleActive={toggleActiveLomba}
         onHapus={hapusLomba}
       />
 

@@ -13,11 +13,13 @@ import {
 import { formatRupiah } from "@/lib/format";
 
 export default function TambahKeuanganModal({
+  tahun,
   onClose,
   onSuccess,
   entry,
   defaultJenis = "Donasi",
 }: {
+  tahun: string;
   onClose: () => void;
   onSuccess: () => void;
   entry?: KeuanganEntry;
@@ -81,7 +83,9 @@ export default function TambahKeuanganModal({
                   : undefined,
             };
       const res = await fetch(
-        isEdit ? `/api/keuangan/${entry!.id}` : "/api/keuangan",
+        isEdit
+          ? `/api/keuangan/${entry!.id}?tahun=${tahun}`
+          : `/api/keuangan?tahun=${tahun}`,
         {
           method: isEdit ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },

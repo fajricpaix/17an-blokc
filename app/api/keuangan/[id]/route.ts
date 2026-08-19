@@ -4,6 +4,7 @@ import { isAdmin } from "@/lib/auth";
 import { KATEGORI_PENGELUARAN, KeuanganEntry, WAKTU_KONSUMSI } from "@/lib/types";
 
 const JENIS_VALID: KeuanganEntry["jenis"][] = ["Donasi", "Pengeluaran"];
+const TAHUN_VALID = /^\d{4}$/;
 
 export async function PUT(
   req: Request,
@@ -13,6 +14,13 @@ export async function PUT(
     return NextResponse.json(
       { error: "Hanya panitia yang boleh mengubah transaksi keuangan." },
       { status: 401 }
+    );
+  }
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
     );
   }
   const body = await req.json();
@@ -104,7 +112,7 @@ export async function PUT(
     };
   }
 
-  if (!(await updateKeuangan(id, data))) {
+  if (!(await updateKeuangan(tahun, id, data))) {
     return NextResponse.json(
       { error: "Transaksi tidak ditemukan." },
       { status: 404 }
@@ -114,7 +122,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   if (!(await isAdmin())) {
@@ -123,8 +131,15 @@ export async function DELETE(
       { status: 401 }
     );
   }
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
+    );
+  }
   const { id } = await params;
-  if (!(await deleteKeuangan(id))) {
+  if (!(await deleteKeuangan(tahun, id))) {
     return NextResponse.json(
       { error: "Transaksi tidak ditemukan." },
       { status: 404 }

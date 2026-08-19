@@ -10,7 +10,9 @@ export default async function TimCPage() {
   ]);
   return (
     <TimCClient
-      initialKategoriAntarBlok={kategoriAntarBlok}
+      initialKategoriAntarBlok={kategoriAntarBlok.filter(
+        (k) => k.active !== false
+      )}
       initialPerwakilans={perwakilans}
     />
   );

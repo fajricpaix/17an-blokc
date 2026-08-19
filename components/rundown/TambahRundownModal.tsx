@@ -5,10 +5,12 @@ import Modal from "@/components/Modal";
 import { Rundown } from "@/lib/types";
 
 export default function TambahRundownModal({
+  tahun,
   onClose,
   onSuccess,
   rundown,
 }: {
+  tahun: string;
   onClose: () => void;
   onSuccess: () => void;
   rundown?: Rundown;
@@ -27,7 +29,9 @@ export default function TambahRundownModal({
     setLoading(true);
     try {
       const res = await fetch(
-        isEdit ? `/api/rundowns/${rundown!.id}` : "/api/rundowns",
+        isEdit
+          ? `/api/rundowns/${rundown!.id}?tahun=${tahun}`
+          : `/api/rundowns?tahun=${tahun}`,
         {
           method: isEdit ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },

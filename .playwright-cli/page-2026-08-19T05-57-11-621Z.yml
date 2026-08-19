@@ -1,0 +1,229 @@
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - link "Logo Blok C Serpong Lagoon 17an Blok C Serpong Lagoon" [ref=f1e4] [cursor=pointer]:
+        - /url: /
+        - img "Logo Blok C Serpong Lagoon" [ref=f1e7]
+        - generic [ref=f1e8]:
+          - generic [ref=f1e9]: 17an Blok C
+          - generic [ref=f1e10]: Serpong Lagoon
+      - generic [ref=f1e11]:
+        - generic [ref=f1e12]: 🇮🇩
+        - text: Dirgahayu RI
+    - navigation [ref=f1e13]:
+      - generic [ref=f1e14]:
+        - link "🎉 17an C" [ref=f1e15] [cursor=pointer]:
+          - /url: /
+          - generic [ref=f1e16]: 🎉
+          - text: 17an C
+        - link "🏅 Tim C" [ref=f1e17] [cursor=pointer]:
+          - /url: /tim-c
+          - generic [ref=f1e18]: 🏅
+          - text: Tim C
+  - main [ref=f1e20]:
+    - generic [ref=f1e21]:
+      - generic: ⚽
+      - generic: 🏆
+      - generic: 🎾
+      - generic [ref=f1e22]:
+        - paragraph [ref=f1e23]:
+          - generic [ref=f1e24]: 🏅
+          - text: Wakil Blok C
+        - heading "Tim C Lomba Antar Blok" [level=1] [ref=f1e25]:
+          - text: Tim C
+          - generic [ref=f1e26]: Lomba Antar Blok
+        - paragraph [ref=f1e27]: Daftarkan diri jadi perwakilan Blok C di berbagai cabang lomba tingkat lingkungan. Satu peserta boleh ikut lebih dari satu cabor!
+    - generic [ref=f1e30]:
+      - generic [ref=f1e31]:
+        - heading "🏅 Lomba Antar Blok" [level=2] [ref=f1e32]
+        - paragraph [ref=f1e33]:
+          - text: Daftar perlombaan tingkat lingkungan yang diikuti Blok C sebagai perwakilan. Total
+          - strong [ref=f1e34]: "65"
+          - text: perwakilan sudah terdaftar.
+      - generic [ref=f1e35]:
+        - generic [ref=f1e37]:
+          - heading "🎾 Tennis 12 orang" [level=4] [ref=f1e38]:
+            - generic [ref=f1e39]:
+              - generic [ref=f1e40]: 🎾
+              - text: Tennis
+            - generic [ref=f1e41]: 12 orang
+          - generic [ref=f1e42]:
+            - generic [ref=f1e43]: 📅 2 Agu 2026 - 16 Agu 2026
+            - generic [ref=f1e44]: 🔒 Ditutup
+          - generic [ref=f1e45]:
+            - generic [ref=f1e46]:
+              - generic [ref=f1e47]: F
+              - paragraph [ref=f1e48]: Fajri
+              - paragraph [ref=f1e49]: C5/18
+            - generic [ref=f1e50]:
+              - generic [ref=f1e51]: P
+              - paragraph [ref=f1e52]: Prima
+              - paragraph [ref=f1e53]: C8/25
+            - generic [ref=f1e54]:
+              - generic [ref=f1e55]: G
+              - paragraph [ref=f1e56]: Ginting
+              - paragraph [ref=f1e57]: C3/5
+            - generic [ref=f1e58]:
+              - generic [ref=f1e59]: M
+              - paragraph [ref=f1e60]: Melda
+              - paragraph [ref=f1e61]: C3/5
+            - generic [ref=f1e62]:
+              - generic [ref=f1e63]: M
+              - paragraph [ref=f1e64]: Muzie
+              - paragraph [ref=f1e65]: C3/28
+            - generic [ref=f1e66]:
+              - generic [ref=f1e67]: A
+              - paragraph [ref=f1e68]: Aii
+              - paragraph [ref=f1e69]: C5/18
+          - button "Lihat Semua (12)" [ref=f1e70]
+          - button "🔒 Pendaftaran Ditutup" [disabled] [ref=f1e73]
+        - generic [ref=f1e75]:
+          - heading "🁳 Domino 5 orang" [level=4] [ref=f1e76]:
+            - generic [ref=f1e77]:
+              - generic [ref=f1e78]: 🁳
+              - text: Domino
+            - generic [ref=f1e79]: 5 orang
+          - generic [ref=f1e80]: 📅 8 Agu 2026
+          - generic [ref=f1e82]:
+            - generic [ref=f1e83]:
+              - generic [ref=f1e84]: S
+              - paragraph [ref=f1e85]: Sugiarto
+              - paragraph [ref=f1e86]: C3/23
+            - generic [ref=f1e87]:
+              - generic [ref=f1e88]: F
+              - paragraph [ref=f1e89]: Fajri
+              - paragraph [ref=f1e90]: C5/18
+            - generic [ref=f1e91]:
+              - generic [ref=f1e92]: R
+              - paragraph [ref=f1e93]: Reza
+              - paragraph [ref=f1e94]: C1/18B
+            - generic [ref=f1e95]:
+              - generic [ref=f1e96]: R
+              - paragraph [ref=f1e97]: Rahmad Hidayat
+              - paragraph [ref=f1e98]: C7/1
+            - generic [ref=f1e99]:
+              - generic [ref=f1e100]: E
+              - paragraph [ref=f1e101]: Edo
+              - paragraph [ref=f1e102]: C2/29
+          - button "+ Daftar Jadi Perwakilan" [ref=f1e103]
+        - generic [ref=f1e105]:
+          - heading "⚽️ Futsal Junior 19 orang" [level=4] [ref=f1e106]:
+            - generic [ref=f1e107]:
+              - generic [ref=f1e108]: ⚽️
+              - text: Futsal Junior
+            - generic [ref=f1e109]: 19 orang
+          - generic [ref=f1e110]: 📅 7 Agu 2026 - 9 Agu 2026
+          - generic [ref=f1e112]:
+            - paragraph [ref=f1e113]: Kelas 1-3 SD
+            - generic [ref=f1e114]:
+              - generic [ref=f1e115]: M
+              - paragraph [ref=f1e116]: Mahfuz
+              - paragraph [ref=f1e117]: 1 SD · C8/15
+            - generic [ref=f1e118]:
+              - generic [ref=f1e119]: D
+              - paragraph [ref=f1e120]: Denara
+              - paragraph [ref=f1e121]: 1 SD · C8/19A
+            - generic [ref=f1e122]:
+              - generic [ref=f1e123]: E
+              - paragraph [ref=f1e124]: Embun
+              - paragraph [ref=f1e125]: 1 SD · C3/17
+            - generic [ref=f1e126]:
+              - generic [ref=f1e127]: "N"
+              - paragraph [ref=f1e128]: Nathan
+              - paragraph [ref=f1e129]: 1 SD · C10/7
+            - generic [ref=f1e130]:
+              - generic [ref=f1e131]: B
+              - paragraph [ref=f1e132]: Banyu
+              - paragraph [ref=f1e133]: 2 SD · C11/12
+            - generic [ref=f1e134]:
+              - generic [ref=f1e135]: B
+              - paragraph [ref=f1e136]: Bhumi
+              - paragraph [ref=f1e137]: 2 SD · C11/12
+          - button "Lihat Semua (19)" [ref=f1e138]
+          - button "+ Daftar Jadi Perwakilan" [ref=f1e141]
+        - generic [ref=f1e143]:
+          - heading "🏓 Tenis Meja 2 orang" [level=4] [ref=f1e144]:
+            - generic [ref=f1e145]:
+              - generic [ref=f1e146]: 🏓
+              - text: Tenis Meja
+            - generic [ref=f1e147]: 2 orang
+          - generic [ref=f1e148]: 📅 11 Agu 2026 - 13 Agu 2026
+          - generic [ref=f1e150]:
+            - generic [ref=f1e151]:
+              - generic [ref=f1e152]: R
+              - paragraph [ref=f1e153]: Rizal
+              - paragraph [ref=f1e154]: C2/18
+            - generic [ref=f1e155]:
+              - generic [ref=f1e156]: K
+              - paragraph [ref=f1e157]: Kahar
+              - paragraph [ref=f1e158]: C11/19
+          - button "+ Daftar Jadi Perwakilan" [ref=f1e159]
+        - generic [ref=f1e161]:
+          - heading "🏊🏻‍♂️ Renang Junior 7 orang" [level=4] [ref=f1e162]:
+            - generic [ref=f1e163]:
+              - generic [ref=f1e164]: 🏊🏻‍♂️
+              - text: Renang Junior
+            - generic [ref=f1e165]: 7 orang
+          - generic [ref=f1e166]: 📅 9 Agu 2026
+          - generic [ref=f1e168]:
+            - generic [ref=f1e169]:
+              - generic [ref=f1e170]: L
+              - paragraph [ref=f1e171]: Leander
+              - paragraph [ref=f1e172]: C6/6
+            - generic [ref=f1e173]:
+              - generic [ref=f1e174]: S
+              - paragraph [ref=f1e175]: Sabriya Zora Malika
+              - paragraph [ref=f1e176]: C7/06
+            - generic [ref=f1e177]:
+              - generic [ref=f1e178]: G
+              - paragraph [ref=f1e179]: Gauri
+              - paragraph [ref=f1e180]: C6/8
+            - generic [ref=f1e181]:
+              - generic [ref=f1e182]: B
+              - paragraph [ref=f1e183]: Barca
+              - paragraph [ref=f1e184]: C1/2
+            - generic [ref=f1e185]:
+              - generic [ref=f1e186]: G
+              - paragraph [ref=f1e187]: Ghaizan Hisyam Asyari
+              - paragraph [ref=f1e188]: C5/10
+            - generic [ref=f1e189]:
+              - generic [ref=f1e190]: E
+              - paragraph [ref=f1e191]: Emyr muttaqien
+              - paragraph [ref=f1e192]: C8/23
+          - button "Lihat Semua (7)" [ref=f1e193]
+          - button "+ Daftar Jadi Perwakilan" [ref=f1e196]
+        - generic [ref=f1e198]:
+          - heading "🏀 Basket 5 orang" [level=4] [ref=f1e199]:
+            - generic [ref=f1e200]:
+              - generic [ref=f1e201]: 🏀
+              - text: Basket
+            - generic [ref=f1e202]: 5 orang
+          - generic [ref=f1e203]: 📅 15 Agu 2026
+          - generic [ref=f1e205]:
+            - generic [ref=f1e206]:
+              - generic [ref=f1e207]: S
+              - paragraph [ref=f1e208]: Sugiarto
+              - paragraph [ref=f1e209]: C3/23
+            - generic [ref=f1e210]:
+              - generic [ref=f1e211]: P
+              - paragraph [ref=f1e212]: Prima
+              - paragraph [ref=f1e213]: C8/25
+            - generic [ref=f1e214]:
+              - generic [ref=f1e215]: J
+              - paragraph [ref=f1e216]: Jeremmy
+              - paragraph [ref=f1e217]: C6/29
+            - generic [ref=f1e218]:
+              - generic [ref=f1e219]: M
+              - paragraph [ref=f1e220]: Mayor Teddy
+              - paragraph [ref=f1e221]: C3/1B
+            - generic [ref=f1e222]:
+              - generic [ref=f1e223]: S
+              - paragraph [ref=f1e224]: Salfa
+              - paragraph [ref=f1e225]: C5/21
+          - button "+ Daftar Jadi Perwakilan" [ref=f1e226]
+    - generic [ref=f1e228]:
+      - generic [ref=f1e229]: 🇮🇩
+      - text: Panitia 17an Blok C Pelican — Serpong Lagoon
+  - button "Kirim Kritik & Saran" [ref=f1e230]: 📝
+  - button "Open Next.js Dev Tools" [ref=f1e236] [cursor=pointer]
+  - alert [ref=f1e240]

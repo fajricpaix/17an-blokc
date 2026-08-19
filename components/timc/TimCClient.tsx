@@ -30,7 +30,10 @@ export default function TimCClient({
         fetch("/api/kategori-antar-blok"),
         fetch("/api/perwakilan"),
       ]);
-      if (kRes.ok) setKategoriAntarBlok(await kRes.json());
+      if (kRes.ok) {
+        const kategori: KategoriAntarBlok[] = await kRes.json();
+        setKategoriAntarBlok(kategori.filter((k) => k.active !== false));
+      }
       if (wRes.ok) setPerwakilans(await wRes.json());
     } catch {
       // biarkan data lama tampil jika refresh gagal

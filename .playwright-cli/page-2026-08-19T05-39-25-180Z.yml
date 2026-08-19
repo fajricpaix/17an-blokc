@@ -1,0 +1,70 @@
+- generic [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - link "Logo Blok C Serpong Lagoon 17an Blok C Serpong Lagoon" [ref=f2e4] [cursor=pointer]:
+        - /url: /
+        - img "Logo Blok C Serpong Lagoon" [ref=f2e7]
+        - generic [ref=f2e8]:
+          - generic [ref=f2e9]: 17an Blok C
+          - generic [ref=f2e10]: Serpong Lagoon
+      - button "Keluar" [ref=f2e11]
+  - banner [ref=f2e13]:
+    - generic [ref=f2e14]:
+      - generic [ref=f2e15]:
+        - heading "🛠️ Dashboard Panitia" [level=1] [ref=f2e16]
+        - paragraph [ref=f2e17]: Manajemen Acara 17an Blok C Serpong Lagoon
+      - navigation [ref=f2e18]:
+        - link "🏠 Home" [ref=f2e19] [cursor=pointer]:
+          - /url: /admin
+        - link "💰 Keuangan" [ref=f2e20] [cursor=pointer]:
+          - /url: /admin/keuangan
+        - link "📝 Kritik & Saran" [ref=f2e21] [cursor=pointer]:
+          - /url: /admin/kritik-saran
+  - main [ref=f2e22]:
+    - generic [ref=f2e23]:
+      - generic [ref=f2e24]: "Tahun:"
+      - generic [ref=f2e25]:
+        - button "2027" [expanded] [active] [ref=f2e26]
+        - listbox [ref=f2e72]:
+          - option [selected] [ref=f2e73]:
+            - button "2027" [ref=f2e74]
+          - option [ref=f2e75]:
+            - button "2026" [ref=f2e76]
+          - listitem [ref=f2e77]:
+            - button "+ Tahun Baru" [ref=f2e78]
+    - generic [ref=f2e29]:
+      - generic [ref=f2e30]:
+        - heading "💰 Laporan Keuangan Acara" [level=2] [ref=f2e31]
+        - paragraph [ref=f2e32]:
+          - text: Total
+          - strong [ref=f2e33]: "0"
+          - text: transaksi tercatat.
+      - generic [ref=f2e34]:
+        - generic [ref=f2e35]:
+          - paragraph [ref=f2e36]: Total Donasi
+          - paragraph [ref=f2e37]: Rp 0
+        - generic [ref=f2e38]:
+          - paragraph [ref=f2e39]: Total Pengeluaran
+          - paragraph [ref=f2e40]: Rp 0
+        - generic [ref=f2e41]:
+          - paragraph [ref=f2e42]: Saldo
+          - paragraph [ref=f2e43]: Rp 0
+      - generic [ref=f2e44]:
+        - generic [ref=f2e45]:
+          - button "🎁 Donasi" [ref=f2e46]
+          - button "🧾 Pengeluaran" [ref=f2e47]
+        - generic [ref=f2e48]:
+          - button "🖨️ Cetak PDF" [ref=f2e49]
+          - button "+ Tambah Donasi" [ref=f2e50]
+      - table [ref=f2e52]:
+        - rowgroup [ref=f2e53]:
+          - row [ref=f2e54]:
+            - columnheader "No" [ref=f2e55]
+            - columnheader "Alamat Rumah" [ref=f2e56]
+            - columnheader "Jumlah Donasi" [ref=f2e57]
+            - columnheader "Aksi" [ref=f2e58]
+        - rowgroup [ref=f2e59]:
+          - row [ref=f2e60]:
+            - cell "Belum ada donasi tercatat." [ref=f2e61]
+  - button "Open Next.js Dev Tools" [ref=f2e67] [cursor=pointer]
+  - alert [ref=f2e71]

@@ -4,8 +4,17 @@ import { isAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  return NextResponse.json(await getRundowns());
+const TAHUN_VALID = /^\d{4}$/;
+
+export async function GET(req: Request) {
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
+    );
+  }
+  return NextResponse.json(await getRundowns(tahun));
 }
 
 export async function POST(req: Request) {
@@ -13,6 +22,13 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: "Hanya panitia yang boleh menambah rundown." },
       { status: 401 }
+    );
+  }
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
     );
   }
   const body = await req.json();
@@ -36,7 +52,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const rundown = await addRundown({
+  const rundown = await addRundown(tahun, {
     startTime,
     endTime,
     title,

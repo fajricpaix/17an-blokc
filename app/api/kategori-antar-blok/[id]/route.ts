@@ -19,6 +19,7 @@ export async function PUT(
     tanggalMulai?: string | null;
     tanggalSelesai?: string | null;
     locked?: boolean;
+    active?: boolean;
   } = {};
 
   if (typeof body.name === "string") {
@@ -55,6 +56,9 @@ export async function PUT(
   }
   if (typeof body.locked === "boolean") {
     data.locked = body.locked;
+  }
+  if (typeof body.active === "boolean") {
+    data.active = body.active;
   }
   if (
     data.tanggalMulai &&

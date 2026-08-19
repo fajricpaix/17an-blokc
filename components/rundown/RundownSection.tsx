@@ -1,9 +1,11 @@
 "use client";
 
 import { forwardRef, useImperativeHandle, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Rundown } from "@/lib/types";
 import RundownTable from "./RundownTable";
 import TambahRundownModal from "./TambahRundownModal";
+import TahunSwitcher from "./TahunSwitcher";
 
 export interface RundownSectionHandle {
   bukaTambah: () => void;
@@ -13,14 +15,17 @@ const RundownSection = forwardRef<
   RundownSectionHandle,
   {
     initialRundowns: Rundown[];
+    tahun: string;
+    tahunList: string[];
     busyId: string | null;
     setBusyId: (id: string | null) => void;
     tampilkanNotif: (pesan: string) => void;
   }
 >(function RundownSection(
-  { initialRundowns, busyId, setBusyId, tampilkanNotif },
+  { initialRundowns, tahun, tahunList, busyId, setBusyId, tampilkanNotif },
   ref
 ) {
+  const router = useRouter();
   const [rundowns, setRundowns] = useState(initialRundowns);
   const [showTambah, setShowTambah] = useState(false);
   const [editRundown, setEditRundown] = useState<Rundown | null>(null);
@@ -29,9 +34,13 @@ const RundownSection = forwardRef<
     bukaTambah: () => setShowTambah(true),
   }));
 
+  function gantiTahun(t: string) {
+    router.push(`/admin?rundownTahun=${t}`);
+  }
+
   async function refreshRundowns() {
     try {
-      const res = await fetch("/api/rundowns");
+      const res = await fetch(`/api/rundowns?tahun=${tahun}`);
       if (res.ok) setRundowns(await res.json());
     } catch {
       // biarkan data lama jika gagal
@@ -44,7 +53,7 @@ const RundownSection = forwardRef<
     }
     setBusyId(r.id);
     try {
-      const res = await fetch(`/api/rundowns/${r.id}`, {
+      const res = await fetch(`/api/rundowns/${r.id}?tahun=${tahun}`, {
         method: "DELETE",
       });
       if (!res.ok) {
@@ -63,8 +72,11 @@ const RundownSection = forwardRef<
 
   return (
     <>
+      <TahunSwitcher tahun={tahun} tahunList={tahunList} onGanti={gantiTahun} />
+
       <RundownTable
         rundowns={rundowns}
+        tahun={tahun}
         busyId={busyId}
         onEdit={setEditRundown}
         onHapus={hapusRundown}
@@ -72,6 +84,7 @@ const RundownSection = forwardRef<
 
       {showTambah && (
         <TambahRundownModal
+          tahun={tahun}
           onClose={() => setShowTambah(false)}
           onSuccess={() => {
             refreshRundowns();
@@ -81,6 +94,7 @@ const RundownSection = forwardRef<
       )}
       {editRundown && (
         <TambahRundownModal
+          tahun={tahun}
           rundown={editRundown}
           onClose={() => setEditRundown(null)}
           onSuccess={() => {

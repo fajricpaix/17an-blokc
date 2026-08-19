@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const ADMIN_NAV_ITEMS = [
   { href: "/admin", label: "Home", emoji: "🏠" },
   { href: "/admin/keuangan", label: "Keuangan", emoji: "💰" },
+  { href: "/admin/kritik-saran", label: "Kritik & Saran", emoji: "📝" },
 ] as const;
 
 export function AdminNavDesktop() {

@@ -2,6 +2,7 @@ import {
   Competition,
   KategoriAntarBlok,
   KeuanganEntry,
+  KritikSaran,
   Participant,
   Perwakilan,
   Rundown,
@@ -14,11 +15,18 @@ import {
 // deprecation url.parse dan tidak cocok untuk dipakai server-side).
 const DATABASE_URL = "https://sl-blokc-default-rtdb.firebaseio.com";
 
-async function dbFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${DATABASE_URL}/${path}.json`, {
-    ...init,
-    cache: "no-store",
-  });
+async function dbFetch<T>(
+  path: string,
+  init?: RequestInit,
+  query?: string
+): Promise<T> {
+  const res = await fetch(
+    `${DATABASE_URL}/${path}.json${query ? `?${query}` : ""}`,
+    {
+      ...init,
+      cache: "no-store",
+    }
+  );
   if (!res.ok) {
     throw new Error(`Firebase REST error ${res.status} on ${path}`);
   }
@@ -51,14 +59,14 @@ export async function addCompetition(
 
 export async function updateCompetition(
   id: string,
-  data: Omit<Competition, "id">
+  data: Partial<Omit<Competition, "id">>
 ): Promise<boolean> {
   const existing = await dbFetch<Omit<Competition, "id"> | null>(
     `competitions/${id}`
   );
   if (!existing) return false;
   await dbFetch(`competitions/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     body: JSON.stringify(data),
   });
   return true;
@@ -126,6 +134,7 @@ export async function updateKategoriAntarBlok(
     tanggalMulai?: string | null;
     tanggalSelesai?: string | null;
     locked?: boolean;
+    active?: boolean;
   }
 ): Promise<boolean> {
   const existing = await dbFetch<Omit<KategoriAntarBlok, "id"> | null>(
@@ -241,9 +250,20 @@ export async function deleteSponsor(id: string): Promise<Sponsor | null> {
   return { id, ...existing };
 }
 
-export async function getRundowns(): Promise<Rundown[]> {
+// Daftar tahun yang punya data rundown, terurut dari terbaru. Pakai query
+// "shallow=true" biar cuma narik key tahunnya saja, bukan seluruh isi data.
+export async function getTahunRundownList(): Promise<string[]> {
+  const val = await dbFetch<Record<string, boolean> | null>(
+    "rundowns",
+    undefined,
+    "shallow=true"
+  );
+  return Object.keys(val ?? {}).sort((a, b) => b.localeCompare(a));
+}
+
+export async function getRundowns(tahun: string): Promise<Rundown[]> {
   const val = await dbFetch<Record<string, Omit<Rundown, "id">> | null>(
-    "rundowns"
+    `rundowns/${tahun}`
   );
   return snapshotToList<Rundown>(val).sort((a, b) =>
     a.startTime.localeCompare(b.startTime)
@@ -251,9 +271,10 @@ export async function getRundowns(): Promise<Rundown[]> {
 }
 
 export async function addRundown(
+  tahun: string,
   data: Omit<Rundown, "id">
 ): Promise<Rundown> {
-  const { name } = await dbFetch<{ name: string }>("rundowns", {
+  const { name } = await dbFetch<{ name: string }>(`rundowns/${tahun}`, {
     method: "POST",
     body: JSON.stringify(data),
   });
@@ -261,32 +282,47 @@ export async function addRundown(
 }
 
 export async function updateRundown(
+  tahun: string,
   id: string,
   data: Omit<Rundown, "id">
 ): Promise<boolean> {
   const existing = await dbFetch<Omit<Rundown, "id"> | null>(
-    `rundowns/${id}`
+    `rundowns/${tahun}/${id}`
   );
   if (!existing) return false;
-  await dbFetch(`rundowns/${id}`, {
+  await dbFetch(`rundowns/${tahun}/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
   });
   return true;
 }
 
-export async function deleteRundown(id: string): Promise<boolean> {
+export async function deleteRundown(
+  tahun: string,
+  id: string
+): Promise<boolean> {
   const existing = await dbFetch<Omit<Rundown, "id"> | null>(
-    `rundowns/${id}`
+    `rundowns/${tahun}/${id}`
   );
   if (!existing) return false;
-  await dbFetch(`rundowns/${id}`, { method: "DELETE" });
+  await dbFetch(`rundowns/${tahun}/${id}`, { method: "DELETE" });
   return true;
 }
 
-export async function getKeuangan(): Promise<KeuanganEntry[]> {
+// Daftar tahun yang punya data keuangan, terurut dari terbaru. Pakai query
+// "shallow=true" biar cuma narik key tahunnya saja, bukan seluruh isi data.
+export async function getTahunKeuanganList(): Promise<string[]> {
+  const val = await dbFetch<Record<string, boolean> | null>(
+    "keuangan",
+    undefined,
+    "shallow=true"
+  );
+  return Object.keys(val ?? {}).sort((a, b) => b.localeCompare(a));
+}
+
+export async function getKeuangan(tahun: string): Promise<KeuanganEntry[]> {
   const val = await dbFetch<Record<string, Omit<KeuanganEntry, "id">> | null>(
-    "keuangan"
+    `keuangan/${tahun}`
   );
   return snapshotToList<KeuanganEntry>(val).sort((a, b) =>
     a.tanggal.localeCompare(b.tanggal)
@@ -294,10 +330,11 @@ export async function getKeuangan(): Promise<KeuanganEntry[]> {
 }
 
 export async function addKeuangan(
+  tahun: string,
   data: Omit<KeuanganEntry, "id" | "createdAt">
 ): Promise<KeuanganEntry> {
   const record = { ...data, createdAt: new Date().toISOString() };
-  const { name } = await dbFetch<{ name: string }>("keuangan", {
+  const { name } = await dbFetch<{ name: string }>(`keuangan/${tahun}`, {
     method: "POST",
     body: JSON.stringify(record),
   });
@@ -305,25 +342,73 @@ export async function addKeuangan(
 }
 
 export async function updateKeuangan(
+  tahun: string,
   id: string,
   data: Omit<KeuanganEntry, "id" | "createdAt">
 ): Promise<boolean> {
   const existing = await dbFetch<Omit<KeuanganEntry, "id"> | null>(
-    `keuangan/${id}`
+    `keuangan/${tahun}/${id}`
   );
   if (!existing) return false;
-  await dbFetch(`keuangan/${id}`, {
+  await dbFetch(`keuangan/${tahun}/${id}`, {
     method: "PATCH",
     body: JSON.stringify(data),
   });
   return true;
 }
 
-export async function deleteKeuangan(id: string): Promise<boolean> {
+export async function deleteKeuangan(
+  tahun: string,
+  id: string
+): Promise<boolean> {
   const existing = await dbFetch<Omit<KeuanganEntry, "id"> | null>(
-    `keuangan/${id}`
+    `keuangan/${tahun}/${id}`
   );
   if (!existing) return false;
-  await dbFetch(`keuangan/${id}`, { method: "DELETE" });
+  await dbFetch(`keuangan/${tahun}/${id}`, { method: "DELETE" });
+  return true;
+}
+
+export async function getKritikSaran(): Promise<KritikSaran[]> {
+  const val = await dbFetch<Record<string, Omit<KritikSaran, "id">> | null>(
+    "kritikSaran"
+  );
+  return snapshotToList<KritikSaran>(val).sort((a, b) =>
+    b.createdAt.localeCompare(a.createdAt)
+  );
+}
+
+export async function addKritikSaran(
+  data: Omit<KritikSaran, "id" | "createdAt">
+): Promise<KritikSaran> {
+  const record = { ...data, createdAt: new Date().toISOString() };
+  const { name } = await dbFetch<{ name: string }>("kritikSaran", {
+    method: "POST",
+    body: JSON.stringify(record),
+  });
+  return { id: name, ...record };
+}
+
+export async function updateKritikSaran(
+  id: string,
+  data: { dibaca: boolean }
+): Promise<boolean> {
+  const existing = await dbFetch<Omit<KritikSaran, "id"> | null>(
+    `kritikSaran/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`kritikSaran/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  return true;
+}
+
+export async function deleteKritikSaran(id: string): Promise<boolean> {
+  const existing = await dbFetch<Omit<KritikSaran, "id"> | null>(
+    `kritikSaran/${id}`
+  );
+  if (!existing) return false;
+  await dbFetch(`kritikSaran/${id}`, { method: "DELETE" });
   return true;
 }

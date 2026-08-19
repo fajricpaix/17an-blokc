@@ -9,11 +9,13 @@ function formatJam(waktu: string) {
 
 export default function RundownTable({
   rundowns,
+  tahun,
   busyId,
   onEdit,
   onHapus,
 }: {
   rundowns: Rundown[];
+  tahun: string;
   busyId: string | null;
   onEdit: (r: Rundown) => void;
   onHapus: (r: Rundown) => void;
@@ -107,7 +109,7 @@ export default function RundownTable({
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="mb-1 text-xl font-extrabold text-primary">
-            📋 Rundown Acara
+            📋 Rundown Acara {tahun}
           </h2>
           <p className="text-gray-600">
             Total <strong>{rundowns.length}</strong> sesi rundown terdaftar.

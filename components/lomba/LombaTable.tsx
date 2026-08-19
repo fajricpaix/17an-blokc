@@ -13,6 +13,7 @@ export default function LombaTable({
   busyId,
   onLihatPeserta,
   onEdit,
+  onToggleActive,
   onHapus,
 }: {
   tab: Tab;
@@ -21,6 +22,7 @@ export default function LombaTable({
   busyId: string | null;
   onLihatPeserta: (l: Competition) => void;
   onEdit: (l: Competition) => void;
+  onToggleActive: (l: Competition) => void;
   onHapus: (l: Competition) => void;
 }) {
   const [detailLomba, setDetailLomba] = useState<Competition | null>(null);
@@ -45,6 +47,7 @@ export default function LombaTable({
               <th className="px-4 py-3">Kategori</th>
               <th className="px-4 py-3">Jumlah Peserta</th>
               <th className="px-4 py-3">Deskripsi</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Aksi</th>
             </tr>
           </thead>
@@ -52,7 +55,7 @@ export default function LombaTable({
             {lombaTampil.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="px-4 py-8 text-center text-gray-400 italic"
                 >
                   Belum ada lomba di kategori ini.
@@ -96,6 +99,17 @@ export default function LombaTable({
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
+                    {l.active === false ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-gray-200 px-2.5 py-0.5 text-xs font-bold text-gray-600">
+                        ⚪ Nonaktif
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700">
+                        🟢 Aktif
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex gap-2">
                       <button
                         onClick={() => onEdit(l)}
@@ -103,6 +117,13 @@ export default function LombaTable({
                         className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
                       >
                         ✏️ Edit
+                      </button>
+                      <button
+                        onClick={() => onToggleActive(l)}
+                        disabled={busyId === l.id}
+                        className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-dark-primary transition-colors hover:bg-red-50 disabled:opacity-60"
+                      >
+                        {l.active === false ? "🟢 Aktifkan" : "⚪ Nonaktifkan"}
                       </button>
                       <button
                         onClick={() => onHapus(l)}

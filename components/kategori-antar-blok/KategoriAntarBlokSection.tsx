@@ -120,6 +120,35 @@ const KategoriAntarBlokSection = forwardRef<
     }
   }
 
+  async function toggleActiveKategoriAntarBlok(k: KategoriAntarBlok) {
+    const akanAktif = k.active === false;
+    setBusyId(k.id);
+    try {
+      const res = await fetch(`/api/kategori-antar-blok/${k.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: akanAktif }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        tampilkanNotif(`⚠️ ${data.error ?? "Gagal mengubah status."}`);
+        return;
+      }
+      setKategoriAntarBlok((prev) =>
+        prev.map((x) => (x.id === k.id ? { ...x, active: akanAktif } : x))
+      );
+      tampilkanNotif(
+        akanAktif
+          ? `🟢 Kategori "${k.name}" berhasil diaktifkan.`
+          : `⚪ Kategori "${k.name}" berhasil dinonaktifkan.`
+      );
+    } catch {
+      tampilkanNotif("⚠️ Gagal terhubung ke server.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   async function hapusPerwakilan(p: Perwakilan) {
     if (!confirm(`Hapus perwakilan "${p.name}" dari semua cabor?`)) {
       return;
@@ -152,6 +181,7 @@ const KategoriAntarBlokSection = forwardRef<
         onLihatPeserta={setLihatPesertaKategori}
         onEdit={setEditKategoriAntarBlok}
         onToggleLock={toggleLockKategoriAntarBlok}
+        onToggleActive={toggleActiveKategoriAntarBlok}
         onHapus={hapusKategoriAntarBlok}
       />
 

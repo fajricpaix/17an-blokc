@@ -6,9 +6,17 @@ import { KATEGORI_PENGELUARAN, KeuanganEntry, WAKTU_KONSUMSI } from "@/lib/types
 export const dynamic = "force-dynamic";
 
 const JENIS_VALID: KeuanganEntry["jenis"][] = ["Donasi", "Pengeluaran"];
+const TAHUN_VALID = /^\d{4}$/;
 
-export async function GET() {
-  return NextResponse.json(await getKeuangan());
+export async function GET(req: Request) {
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
+    );
+  }
+  return NextResponse.json(await getKeuangan(tahun));
 }
 
 export async function POST(req: Request) {
@@ -16,6 +24,13 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: "Hanya panitia yang boleh menambah transaksi keuangan." },
       { status: 401 }
+    );
+  }
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
     );
   }
   const body = await req.json();
@@ -54,7 +69,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    const entry = await addKeuangan({
+    const entry = await addKeuangan(tahun, {
       tanggal,
       keterangan: alamatRumah,
       jenis,
@@ -102,7 +117,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const entry = await addKeuangan({
+  const entry = await addKeuangan(tahun, {
     tanggal,
     keterangan: keteranganInput,
     jenis,

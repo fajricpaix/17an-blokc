@@ -14,32 +14,47 @@ export async function PUT(
     );
   }
   const body = await req.json();
-  const name = typeof body.name === "string" ? body.name.trim() : "";
-  const description =
-    typeof body.description === "string" ? body.description.trim() : "";
-  const category = body.category as Category;
+  const data: {
+    name?: string;
+    category?: Category;
+    description?: string;
+    active?: boolean;
+  } = {};
 
-  if (!name) {
-    return NextResponse.json(
-      { error: "Nama perlombaan wajib diisi." },
-      { status: 400 }
-    );
+  if (typeof body.name === "string") {
+    const name = body.name.trim();
+    if (!name) {
+      return NextResponse.json(
+        { error: "Nama perlombaan wajib diisi." },
+        { status: 400 }
+      );
+    }
+    data.name = name;
   }
-  if (!ALL_CATEGORIES.includes(category)) {
-    return NextResponse.json(
-      { error: "Kategori tidak valid." },
-      { status: 400 }
-    );
+  if ("category" in body) {
+    if (!ALL_CATEGORIES.includes(body.category)) {
+      return NextResponse.json(
+        { error: "Kategori tidak valid." },
+        { status: 400 }
+      );
+    }
+    data.category = body.category as Category;
+  }
+  if (typeof body.description === "string") {
+    data.description = body.description.trim();
+  }
+  if (typeof body.active === "boolean") {
+    data.active = body.active;
   }
 
   const { id } = await params;
-  if (!(await updateCompetition(id, { name, category, description }))) {
+  if (!(await updateCompetition(id, data))) {
     return NextResponse.json(
       { error: "Lomba tidak ditemukan." },
       { status: 404 }
     );
   }
-  return NextResponse.json({ id, name, category, description });
+  return NextResponse.json({ id, ...data });
 }
 
 export async function DELETE(

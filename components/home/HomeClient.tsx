@@ -33,12 +33,16 @@ export default function HomeClient({
     setIsRefreshing(true);
     const jedaMinimum = new Promise((resolve) => setTimeout(resolve, 600));
     try {
+      const tahun = new Date().getFullYear();
       const [lRes, pRes, rRes] = await Promise.all([
         fetch("/api/competitions"),
         fetch("/api/participants"),
-        fetch("/api/rundowns"),
+        fetch(`/api/rundowns?tahun=${tahun}`),
       ]);
-      if (lRes.ok) setLombas(await lRes.json());
+      if (lRes.ok) {
+        const lombas: Competition[] = await lRes.json();
+        setLombas(lombas.filter((l) => l.active !== false));
+      }
       if (pRes.ok) setPesertas(await pRes.json());
       if (rRes.ok) setRundowns(await rRes.json());
     } catch {

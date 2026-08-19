@@ -29,6 +29,8 @@ export default function AdminClient({
   initialKategoriAntarBlok,
   initialPerwakilans,
   initialRundowns,
+  rundownTahun,
+  rundownTahunList,
   initialSponsors,
 }: {
   initialLombas: Competition[];
@@ -36,6 +38,8 @@ export default function AdminClient({
   initialKategoriAntarBlok: KategoriAntarBlok[];
   initialPerwakilans: Perwakilan[];
   initialRundowns: Rundown[];
+  rundownTahun: string;
+  rundownTahunList: string[];
   initialSponsors: Sponsor[];
 }) {
   const [notif, setNotif] = useState("");
@@ -69,8 +73,11 @@ export default function AdminClient({
       />
 
       <RundownSection
+        key={rundownTahun}
         ref={rundownRef}
         initialRundowns={initialRundowns}
+        tahun={rundownTahun}
+        tahunList={rundownTahunList}
         busyId={busyId}
         setBusyId={setBusyId}
         tampilkanNotif={tampilkanNotif}

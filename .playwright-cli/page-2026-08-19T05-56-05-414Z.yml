@@ -1,0 +1,29 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Logo Blok C Serpong Lagoon 17an Blok C Serpong Lagoon" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Logo Blok C Serpong Lagoon" [ref=e7]
+        - generic [ref=e8]:
+          - generic [ref=e9]: 17an Blok C
+          - generic [ref=e10]: Serpong Lagoon
+      - generic [ref=e11]:
+        - generic [ref=e12]: 🇮🇩
+        - text: Dirgahayu RI
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - heading "🔐 Area Panitia" [level=1] [ref=e17]
+        - paragraph [ref=e18]: Acara 17an Blok C Serpong Lagoon
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - generic [ref=e21]: Email / Username Panitia
+            - textbox "panitia@blokc.id" [ref=e22]
+          - generic [ref=e23]:
+            - generic [ref=e24]: Password
+            - textbox "••••••••" [ref=e25]
+          - button "Masuk Area Panitia" [ref=e26]
+      - paragraph [ref=e27]:
+        - link "← Kembali ke Halaman Utama" [ref=e28] [cursor=pointer]:
+          - /url: /
+  - button "Open Next.js Dev Tools" [ref=e34] [cursor=pointer]

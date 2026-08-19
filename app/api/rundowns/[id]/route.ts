@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { deleteRundown, updateRundown } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
 
+const TAHUN_VALID = /^\d{4}$/;
+
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -10,6 +12,13 @@ export async function PUT(
     return NextResponse.json(
       { error: "Hanya panitia yang boleh mengubah rundown." },
       { status: 401 }
+    );
+  }
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
     );
   }
   const body = await req.json();
@@ -27,7 +36,14 @@ export async function PUT(
   }
 
   const { id } = await params;
-  if (!(await updateRundown(id, { startTime, endTime, title, description }))) {
+  if (
+    !(await updateRundown(tahun, id, {
+      startTime,
+      endTime,
+      title,
+      description,
+    }))
+  ) {
     return NextResponse.json(
       { error: "Rundown tidak ditemukan." },
       { status: 404 }
@@ -37,7 +53,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   if (!(await isAdmin())) {
@@ -46,8 +62,15 @@ export async function DELETE(
       { status: 401 }
     );
   }
+  const tahun = new URL(req.url).searchParams.get("tahun");
+  if (!tahun || !TAHUN_VALID.test(tahun)) {
+    return NextResponse.json(
+      { error: "Parameter tahun tidak valid." },
+      { status: 400 }
+    );
+  }
   const { id } = await params;
-  if (!(await deleteRundown(id))) {
+  if (!(await deleteRundown(tahun, id))) {
     return NextResponse.json(
       { error: "Rundown tidak ditemukan." },
       { status: 404 }
