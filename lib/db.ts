@@ -15,18 +15,25 @@ import {
 // deprecation url.parse dan tidak cocok untuk dipakai server-side).
 const DATABASE_URL = "https://sl-blokc-default-rtdb.firebaseio.com";
 
+// Rules RTDB harus di-deny untuk publik (".read"/".write": false) supaya
+// orang lain tidak bisa akses langsung lewat DATABASE_URL. Server ini tetap
+// bisa baca/tulis karena ikut kirim database secret lewat query "auth".
+const DATABASE_SECRET = process.env.FIREBASE_DATABASE_SECRET;
+
 async function dbFetch<T>(
   path: string,
   init?: RequestInit,
   query?: string
 ): Promise<T> {
-  const res = await fetch(
-    `${DATABASE_URL}/${path}.json${query ? `?${query}` : ""}`,
-    {
-      ...init,
-      cache: "no-store",
-    }
-  );
+  if (!DATABASE_SECRET) {
+    throw new Error("FIREBASE_DATABASE_SECRET belum di-set");
+  }
+  const params = new URLSearchParams(query);
+  params.set("auth", DATABASE_SECRET);
+  const res = await fetch(`${DATABASE_URL}/${path}.json?${params}`, {
+    ...init,
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error(`Firebase REST error ${res.status} on ${path}`);
   }
